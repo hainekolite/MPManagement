@@ -55,6 +55,24 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MainWindowVM.cs" />
+    <Compile Include="ViewModels\Commands\ParameterCommand.cs" />
+    <Compile Include="ViewModels\Commands\RelayCommand.cs" />
+    <Compile Include="ViewModels\Controls\SideBarItemVM.cs" />
+    <Compile Include="ViewModels\MagneticPasteBinnacleVM.cs" />
+    <Compile Include="ViewModels\MagneticPasteInVM.cs" />
+    <Compile Include="ViewModels\MagneticPasteOutVM.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\Converters\MultiValueConverter.cs" />
+    <Compile Include="Views\MagneticPasteBinnacle.xaml.cs">
+      <DependentUpon>MagneticPasteBinnacle.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MagneticPasteIn.xaml.cs">
+      <DependentUpon>MagneticPasteIn.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MagneticPasteOut.xaml.cs">
+      <DependentUpon>MagneticPasteOut.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -67,6 +85,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\MagneticPasteBinnacle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MagneticPasteIn.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MagneticPasteOut.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -95,6 +125,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

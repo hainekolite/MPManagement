@@ -3,22 +3,175 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:MPManagement.Views.Converters"
         xmlns:local="clr-namespace:MPManagement"
         mc:Ignorable="d"
         Title="Manejo de pasta magnetica"
         Background="#E0F2F1"
         Height="768" MinHeight="768"
-        Width="1366" MinWidth="1366">
+        Width="900" MinWidth="1000">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <converters:MultiValueConverter x:Key="MultiValueConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width=".5*"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width=".2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height=".5*"/>
+            <RowDefinition Height=".4*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
 
+        <ListBox  Background="#00695C" ItemsSource="{Binding SideBarItems, Mode=OneTime}" PreviewMouseLeftButtonUp="ItemsControlClicked"
+                 HorizontalContentAlignment="Stretch" x:Name="MenuList" SelectedIndex="0" Margin="0,10,10,10">
+
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="13" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <!-- <Image Source="{Binding Icon, Mode=OneTime}" Width="22" Height="22" /> -->
+                        <TextBlock Text="{Binding Text, Mode=OneTime}" FontSize="26" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="13,0"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+
+            <!-- cada elemento dentro del listbox -->
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Height" Value="60"/>
+                    <Setter Property="ToolTip" Value="{Binding Text}"/>
+                    <Setter Property="Visibility" Value="{Binding Command.CanAccess, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Border Name="Border" Background="Transparent">
+                                    <ContentPresenter/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Border" Property="Background" Value="#009688"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Border" Property="Background" Value="#00BFA5"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
+
+
+
+        <ContentControl Content="{Binding CurrentView, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                        Grid.ColumnSpan="3" Grid.Row="1"
+                        FocusVisualStyle="{x:Null}" x:Name="View"
+                        Margin="0,10,0,10"/>
+
+        <Grid Grid.Column="1" Grid.Row="0" Background="#4DB6AC" Margin="0,10,10,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".5*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <!-- Textblocks -->
+            <TextBlock Grid.Column="0" Grid.Row="0" 
+                       Text="Empleado" FontSize="26"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Margin="10,0,0,0"
+                       Foreground="white"/>
+
+            <TextBlock Grid.Column="0" Grid.Row="1" 
+                       Text="Refrigerador" FontSize="26"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Margin="10,0,0,0"
+                       Foreground="white"/>
+
+            <TextBlock Grid.Column="0" Grid.Row="2" 
+                       Text="Cartucho" FontSize="26"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Margin="10,0,0,0"
+                       Foreground="white"/>
+            
+            <!-- TextBoxes -->
+
+            <TextBox Grid.Column="1" Grid.Row="0" x:Name="EmployeeNameBox"
+                     Margin="10"
+                     FontSize="26"
+                     Foreground="#00695C"
+                     Text="{Binding EmployeeName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                     IsEnabled="{Binding EmployeeNameBoxEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                     MaxLength="50">
+
+                <TextBox.InputBindings>
+                    <KeyBinding Command="{Binding EmployeeNameEnterCommand}" Key="Enter" />
+                    <!-- <KeyBinding CommandParameter="{Binding ElementName=RefrigeratorIdBox}"/> -->
+                </TextBox.InputBindings>
+                
+            </TextBox>
+
+            <TextBox Grid.Column="1" Grid.Row="1" x:Name="RefrigeratorIdBox"
+                     Margin="10"
+                     FontSize="26"
+                     Foreground="#00695C"
+                     Text="{Binding RefrigeratorId, UpdateSourceTrigger=PropertyChanged}"
+                     IsEnabled="{Binding RefrigeratorIdBoxEnabled, UpdateSourceTrigger=PropertyChanged}"
+                     MaxLength="50">
+                
+                <TextBox.InputBindings>
+                    <KeyBinding Command="{Binding RefrigeratorIdBoxEnterCommand}" Key="Enter" />
+                </TextBox.InputBindings>
+                
+            </TextBox>
+
+            <TextBox Grid.Column="1" Grid.Row="2" Name="CartridgeIdBox"
+                     Margin="10"
+                     FontSize="26"
+                     Foreground="#00695C"
+                     Text="{Binding CartridgeId,UpdateSourceTrigger=PropertyChanged}"
+                     IsEnabled="{Binding CartridgeIdBoxEnabled, UpdateSourceTrigger=PropertyChanged}"
+                     MaxLength="50">
+                
+                <TextBox.InputBindings>
+                    <KeyBinding Command="{Binding CartridgeIdEnterCommand}" Key="Enter" />
+                </TextBox.InputBindings>
+                
+            </TextBox>
+        </Grid>
+
+        <!-- Clear Button -->
+        <Button Grid.Column="2" Grid.Row="0" 
+                Height="50" Margin="10,10,0,0" 
+                VerticalAlignment="Top"
+                BorderBrush="Transparent"
+                Background="#00695C"
+                FontSize="26"
+                Foreground="White"
+                Content="Limpiar"
+                Command="{Binding ClearBoxesCommand}">
+
+            <Button.CommandParameter>
+                <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                    <Binding ElementName="EmployeeNameBox"/>
+                    <Binding ElementName="RefrigeratorIdBox"/>
+                    <Binding ElementName="CartridgeIdBox"/>
+                </MultiBinding>
+            </Button.CommandParameter>
+
+        </Button>
     </Grid>
 </Window>

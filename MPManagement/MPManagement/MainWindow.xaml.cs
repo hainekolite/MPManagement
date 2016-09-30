@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MPManagement.ViewModels.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,12 @@ namespace MPManagement
         public MainWindow()
         {
             InitializeComponent();
+            Closed += ShutDownApplication;
+            DataContext = MainWindowVM.Instance;
         }
+
+        private void ShutDownApplication(object sender, EventArgs e) => Application.Current.Shutdown();
+
+        private void ItemsControlClicked(object sender, MouseButtonEventArgs e) => (MenuList.SelectedItem as SideBarItemVM).Command.Execute();
     }
 }
