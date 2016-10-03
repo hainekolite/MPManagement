@@ -35,7 +35,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,18 +69,14 @@
     <Compile Include="ViewModels\Commands\RelayCommand.cs" />
     <Compile Include="ViewModels\Controls\SideBarItemVM.cs" />
     <Compile Include="ViewModels\MagneticPasteBinnacleVM.cs" />
-    <Compile Include="ViewModels\MagneticPasteInVM.cs" />
-    <Compile Include="ViewModels\MagneticPasteOutVM.cs" />
+    <Compile Include="ViewModels\MagneticPasteInOutVM.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\Converters\MultiValueConverter.cs" />
     <Compile Include="Views\MagneticPasteBinnacle.xaml.cs">
       <DependentUpon>MagneticPasteBinnacle.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MagneticPasteIn.xaml.cs">
-      <DependentUpon>MagneticPasteIn.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MagneticPasteOut.xaml.cs">
-      <DependentUpon>MagneticPasteOut.xaml</DependentUpon>
+    <Compile Include="Views\MagneticPasteInOut.xaml.cs">
+      <DependentUpon>MagneticPasteInOut.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -89,11 +94,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MagneticPasteIn.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MagneticPasteOut.xaml">
+    <Page Include="Views\MagneticPasteInOut.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -116,6 +117,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -125,7 +127,20 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SPManagement.Business\SPManagement.Business.csproj">
+      <Project>{9b54849a-dd42-46b2-86e4-465b248d1716}</Project>
+      <Name>SPManagement.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SPManagement.Data\SPManagement.Data.csproj">
+      <Project>{269ec5cd-4f53-4ba0-894d-2bd6a2472328}</Project>
+      <Name>SPManagement.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SPManagement.Models\SPManagement.Models.csproj">
+      <Project>{82a60192-b67e-4a1f-b4ab-3020d22638fa}</Project>
+      <Name>SPManagement.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -15,9 +15,9 @@ using System.Windows.Shapes;
 
 namespace MPManagement.Views
 {
-    public partial class MagneticPasteOut : ContentControl
+    public partial class MagneticPasteInOut : ContentControl
     {
-        public MagneticPasteOut()
+        public MagneticPasteInOut()
         {
             InitializeComponent();
         }

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MPManagement.ViewModels
+namespace Models
 {
-    class MagneticPasteInVM : ViewModelBase
+    public class Class1
     {
-
     }
 }
