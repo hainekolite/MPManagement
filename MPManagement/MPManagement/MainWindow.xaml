@@ -45,7 +45,6 @@
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Height" Value="60"/>
                     <Setter Property="ToolTip" Value="{Binding Text}"/>
-                    <Setter Property="Visibility" Value="{Binding Command.CanAccess, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"/>
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ListBoxItem">
@@ -114,14 +113,14 @@
                      FontSize="26"
                      Foreground="#00695C"
                      Text="{Binding EmployeeName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                     IsEnabled="{Binding EmployeeNameBoxEnabled, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                     IsEnabled="{Binding EmployeeNameBoxEnabled, UpdateSourceTrigger=PropertyChanged}"
                      MaxLength="50">
 
                 <TextBox.InputBindings>
-                    <KeyBinding Command="{Binding EmployeeNameEnterCommand}" Key="Enter" />
-                    <!-- <KeyBinding CommandParameter="{Binding ElementName=RefrigeratorIdBox}"/> -->
+                    <KeyBinding Command="{Binding EmployeeNameEnterCommand}"
+                                CommandParameter="{Binding ElementName=RefrigeratorIdBox}"
+                                Key="Enter"/>
                 </TextBox.InputBindings>
-                
             </TextBox>
 
             <TextBox Grid.Column="1" Grid.Row="1" x:Name="RefrigeratorIdBox"
@@ -133,7 +132,9 @@
                      MaxLength="50">
                 
                 <TextBox.InputBindings>
-                    <KeyBinding Command="{Binding RefrigeratorIdBoxEnterCommand}" Key="Enter" />
+                    <KeyBinding Command="{Binding RefrigeratorIdBoxEnterCommand}" 
+                                CommandParameter="{Binding ElementName=CartridgeIdBox}"
+                                Key="Enter"/>
                 </TextBox.InputBindings>
                 
             </TextBox>
@@ -147,7 +148,9 @@
                      MaxLength="50">
                 
                 <TextBox.InputBindings>
-                    <KeyBinding Command="{Binding CartridgeIdEnterCommand}" Key="Enter" />
+                    <KeyBinding Command="{Binding CartridgeIdEnterCommand}" 
+                                CommandParameter="{Binding ElementName=EmployeeNameBox}"
+                                Key="Enter"/>
                 </TextBox.InputBindings>
                 
             </TextBox>

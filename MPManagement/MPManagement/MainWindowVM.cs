@@ -25,11 +25,11 @@ namespace MPManagement
         private readonly ParameterCommand _employeeNameEnterCommand;
         public ParameterCommand EmployeeNameEnterCommand => _employeeNameEnterCommand;
 
-        private readonly RelayCommand _refrigeratorIdBoxEnterCommand;
-        public RelayCommand RefrigeratorIdBoxEnterCommand => _refrigeratorIdBoxEnterCommand;
+        private readonly ParameterCommand _refrigeratorIdBoxEnterCommand;
+        public ParameterCommand RefrigeratorIdBoxEnterCommand => _refrigeratorIdBoxEnterCommand;
 
-        private readonly RelayCommand _cartridgeIdEnterCommand;
-        public RelayCommand CartridgeIdEnterCommand => _cartridgeIdEnterCommand;
+        private readonly ParameterCommand _cartridgeIdEnterCommand;
+        public ParameterCommand CartridgeIdEnterCommand => _cartridgeIdEnterCommand;
 
         public ObservableCollection<SideBarItemVM> SideBarItems { get; private set; }
 
@@ -61,16 +61,16 @@ namespace MPManagement
             }
         }
 
-        private bool _cartridgeIdBoxBoxEnabled;
+        private bool _cartridgeIdBoxEnabled;
         public bool CartridgeIdBoxEnabled
         {
             get
             {
-                return (_cartridgeIdBoxBoxEnabled);
+                return (_cartridgeIdBoxEnabled);
             }
             set
             {
-                _cartridgeIdBoxBoxEnabled = value;
+                _cartridgeIdBoxEnabled = value;
                 OnPropertyChanged();
             }
         }
@@ -103,16 +103,16 @@ namespace MPManagement
             }
         }
 
-        private string _cartridgeIdBox;
-        public string CartridgeIdBox
+        private string _cartridgeId;
+        public string CartridgeId
         {
             get
             {
-                return (_cartridgeIdBox);
+                return (_cartridgeId);
             }
             set
             {
-                _cartridgeIdBox = value;
+                _cartridgeId = value;
                 OnPropertyChanged();
             }
         }
@@ -140,12 +140,16 @@ namespace MPManagement
             _clearBoxesCommand = new ParameterCommand(ClearAllBoxes);
 
             _employeeNameEnterCommand = new ParameterCommand(EmployeeBoxEnterKey);
-            _refrigeratorIdBoxEnterCommand = new RelayCommand(RefrigeratorIdBoxEnterKey);
-            _cartridgeIdEnterCommand = new RelayCommand(CartridgeIdBoxEnterKey);
+            _refrigeratorIdBoxEnterCommand = new ParameterCommand(RefrigeratorIdBoxEnterKey);
+            _cartridgeIdEnterCommand = new ParameterCommand(CartridgeIdBoxEnterKey);
 
-            _employeeNameBoxEnabled = true;
-            _refrigeratorIdBoxEnabled = false;
-            _cartridgeIdBoxBoxEnabled = false;
+            EmployeeNameBoxEnabled = true;
+            RefrigeratorIdBoxEnabled = false;
+            CartridgeIdBoxEnabled = false;
+
+            EmployeeName = string.Empty;
+            RefrigeratorId = string.Empty;
+            CartridgeId = string.Empty;
 
             SideBarItems = new ObservableCollection<SideBarItemVM>();
 
@@ -160,37 +164,54 @@ namespace MPManagement
 
         private void EmployeeBoxEnterKey(object box)
         {
+            TextBox refrigeratorIdBox = box as TextBox;  
+                      
             RefrigeratorIdBoxEnabled = true;
             EmployeeNameBoxEnabled = false;
             CartridgeIdBoxEnabled = false;
+            refrigeratorIdBox.Focus();
         }
 
-        private void RefrigeratorIdBoxEnterKey()
+        private void RefrigeratorIdBoxEnterKey(object box)
         {
+            TextBox cartridgeIdBox = box as TextBox;
+
             EmployeeNameBoxEnabled = false;
             RefrigeratorIdBoxEnabled = false;
             CartridgeIdBoxEnabled = true;
+            cartridgeIdBox.Focus();
         }
 
-        private void CartridgeIdBoxEnterKey()
+        private void CartridgeIdBoxEnterKey(object box)
         {
-            //do some action
+            TextBox employeeNameBox = box as TextBox;
+
+            //do some action for the datagrid
+
+            EmployeeNameBoxEnabled = true;
+            RefrigeratorIdBoxEnabled = false;
+            CartridgeIdBoxEnabled = false;
+
+            EmployeeName = string.Empty;
+            RefrigeratorId = string.Empty;
+            CartridgeId = string.Empty;
+
+            employeeNameBox.Focus();
+            
         }
 
         private void ClearAllBoxes(object boxes)
         {
             var values = boxes as object[];
             TextBox EmployeeBox = values[0] as TextBox;
-            TextBox RefrigeratorBox = values[1] as TextBox;
-            TextBox CartridgeBox = values[2] as TextBox;
 
-            EmployeeBox.Text = string.Empty;
-            RefrigeratorBox.Text = string.Empty;
-            CartridgeBox.Text = string.Empty;
+            EmployeeName = string.Empty;
+            RefrigeratorId = string.Empty;
+            CartridgeId = string.Empty;
 
-            EmployeeBox.IsEnabled = true;
-            RefrigeratorBox.IsEnabled = false;
-            CartridgeBox.IsEnabled = false;
+            EmployeeNameBoxEnabled = true;
+            RefrigeratorIdBoxEnabled = false;
+            CartridgeIdBoxEnabled = false;
 
             EmployeeBox.Focus();
         }
