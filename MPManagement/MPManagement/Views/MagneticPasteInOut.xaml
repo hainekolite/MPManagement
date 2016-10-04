@@ -144,7 +144,7 @@
             </Grid.ColumnDefinitions>
 
             <DataGrid Grid.Row="1" Grid.Column="0"
-                      Margin="0,10,0,10" ItemsSource="{Binding CartuchoList, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                      Margin="0,10,0,10" ItemsSource="{Binding CartuchoStateZeroList, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                       Background="#00897B"
                       RowHeight="36"                      
                       AutoGenerateColumns="False"
@@ -183,7 +183,7 @@
                         </DataGridTextColumn.ElementStyle>
 
                         <DataGridTextColumn.CellStyle>
-                            <Style TargetType="DataGridCell" x:Name="celda">
+                            <Style TargetType="DataGridCell">
                                 <Setter Property="Background" Value="#00897B"/>
                             </Style>
                         </DataGridTextColumn.CellStyle>
@@ -195,7 +195,7 @@
 
 
             <DataGrid Grid.Row="1" Grid.Column="1"
-                      Margin="0,10,0,10" ItemsSource="{Binding CartuchoList, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                      Margin="0,10,0,10" ItemsSource="{Binding CartuchoStateOneList, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                       Background="#00897B"
                       RowHeight="36"                      
                       AutoGenerateColumns="False"
@@ -231,21 +231,18 @@
                                 <!-- <Setter Property="Background" Value="Black" /> -->
                             </Style>
                         </DataGridTextColumn.ElementStyle>
-                        
+
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Setter Property="Background" Value="AliceBlue"/>
                             </Style>
                         </DataGridTextColumn.CellStyle>
-                        
                     </DataGridTextColumn>
-
                 </DataGrid.Columns>
             </DataGrid>
 
-
             <DataGrid Grid.Row="1" Grid.Column="2"
-                      Margin="0,10,0,10" ItemsSource="{Binding CartuchoList, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                      Margin="0,10,0,10" ItemsSource="{Binding CartuchoStateTwoList, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                       Background="#00897B"
                       RowHeight="36"                      
                       AutoGenerateColumns="False"

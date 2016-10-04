@@ -17,6 +17,10 @@ namespace MPManagement.ViewModels
     {
         #region Properties
 
+        private const int ZERO_STATE = 0;
+        private const int ONE_STATE = 1;
+        private const int TWO_STATE = 2;
+
         //Hacerlo un instance para que lo compartan In y Out y no cargar dos viewModels
         private readonly RefrigeradorBusiness refrigeradorBusiness;
         private readonly CartuchoBusiness cartuchoBusiness;
@@ -36,7 +40,9 @@ namespace MPManagement.ViewModels
         public ParameterCommand CartridgeIdEnterCommand => _cartridgeIdEnterCommand;
 
         private ICollection<Cartucho> _cartuchoList;
-        public ObservableCollection<Cartucho> CartuchoList { get; set; }
+        public ObservableCollection<Cartucho> CartuchoStateZeroList { get; set; }
+        public ObservableCollection<Cartucho> CartuchoStateOneList { get; set; }
+        public ObservableCollection<Cartucho> CartuchoStateTwoList { get; set; }
 
         public ICollection<Refrigerador> RefrigeratorList { get; set; }
 
@@ -155,7 +161,9 @@ namespace MPManagement.ViewModels
                     else
                         _cartuchoList = _cartuchoList.Concat(RefrigeratorList.ElementAt(i).Cartuchos.ToList()).ToList();
                 }
-                CartuchoList = new ObservableCollection<Cartucho>(_cartuchoList);
+                CartuchoStateZeroList = new ObservableCollection<Cartucho>(_cartuchoList.ToList().Where( c => c.Estado == ZERO_STATE));
+                CartuchoStateOneList = new ObservableCollection<Cartucho>(_cartuchoList.ToList().Where(c => c.Estado == ONE_STATE));
+                CartuchoStateTwoList = new ObservableCollection<Cartucho>(_cartuchoList.ToList().Where(c => c.Estado == TWO_STATE));
             }
         }
 
@@ -222,7 +230,7 @@ namespace MPManagement.ViewModels
             };
             /*cartuchoBusiness.InsertCartucho(cartucho);
             CartuchoList.Add(cartucho);*/
-            CartuchoList.ElementAt(2).Estado = 0;
+            //CartuchoList.ElementAt(2).Estado = 0;
 
             EmployeeNameBoxEnabled = true;
             RefrigeratorIdBoxEnabled = false;
