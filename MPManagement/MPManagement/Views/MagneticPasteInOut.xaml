@@ -17,7 +17,7 @@
         </Grid.ColumnDefinitions>
         
          <DataGrid Grid.Column="1" Grid.Row="1"
-                      Margin="10" ItemsSource="{Binding RefrigeratorList.Cartuchos, Mode=OneWay}"
+                      Margin="10" ItemsSource="{Binding RefrigeratorList, Mode=OneWay}"
                       Background="#00897B"
                       RowHeight="36"                      
                       AutoGenerateColumns="False"
@@ -40,7 +40,7 @@
                 </DataGrid.ColumnHeaderStyle>
 
                 <DataGrid.Columns>
-                <DataGridTextColumn MinWidth="64" Header="En Refrigerador" Binding="{Binding NumeroDeCartucho, Mode=OneTime}" Width="*">
+                <DataGridTextColumn MinWidth="64" Header="En Refrigerador" Binding="{Binding NumeroDeRefrigerador, Mode=OneTime}" Width="*">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -48,7 +48,7 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
 
-                <DataGridTextColumn MinWidth="64" Header="En Ambiente" Binding="{Binding NumeroDeCartucho, Mode=OneTime}" Width="*">
+                <DataGridTextColumn MinWidth="64" Header="En Ambiente" Binding="{Binding NumeroDeRefrigerador, Mode=OneTime}" Width="*">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -56,7 +56,7 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
 
-                <DataGridTextColumn MinWidth="64" Header="En Maquina DEK" Binding="{Binding NumeroDeCartucho, Mode=OneTime}" Width="*">
+                <DataGridTextColumn MinWidth="64" Header="En Maquina DEK" Binding="{Binding Cartuchos[0].Id, Mode=OneTime}" Width="*">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
