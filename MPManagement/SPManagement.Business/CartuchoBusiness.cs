@@ -19,7 +19,17 @@ namespace SPManagement.Business
 
         public ICollection<Cartucho> GetAll() => (unitOfWork.CartuchoRepository.GetList());
 
-        public IQueryable<Cartucho> GetAllUserByIQueryable() =>
+        public IQueryable<Cartucho> GetAllCartuchosByIQueryable() =>
             (unitOfWork.CartuchoRepository.GetQuery());
+
+        public IQueryable<Cartucho> GetAllCartuchosByRefrigeradorIdByIQueryable(int refrigeratorId) =>
+            (GetAllCartuchosByIQueryable().Where(c => c.RefrigeradorId == refrigeratorId));
+
+        public void InsertCartucho(Cartucho cartucho)
+        {
+            unitOfWork.CartuchoRepository.Insert(cartucho);
+            unitOfWork.CommitChanges();
+        }
+
     }
 }

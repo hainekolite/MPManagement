@@ -71,6 +71,9 @@
     <Compile Include="ViewModels\MagneticPasteBinnacleVM.cs" />
     <Compile Include="ViewModels\MagneticPasteInOutVM.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\Converters\IntZeroStateToVisibilityConverter.cs" />
+    <Compile Include="Views\Converters\IntSecondStateToVisibilityConverter.cs" />
+    <Compile Include="Views\Converters\IntFirstStateToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\MultiValueConverter.cs" />
     <Compile Include="Views\MagneticPasteBinnacle.xaml.cs">
       <DependentUpon>MagneticPasteBinnacle.xaml</DependentUpon>

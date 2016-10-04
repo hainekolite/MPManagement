@@ -22,6 +22,9 @@ namespace SPManagement.Business
         public IQueryable<Refrigerador> GetAllRefrigeratorsByIQueryable() => 
             (unitOfWork.RefrigeradorRepository.GetQuery(null, null, includeProperties: GetIncludeProperties()));
 
+        public Refrigerador GetRefrigeradorByIQueriable(string refrigeratorName) =>
+            (unitOfWork.RefrigeradorRepository.GetQuery().Where(r => r.NumeroDeRefrigerador == refrigeratorName).ToList().FirstOrDefault());            
+
         public string[] GetIncludeProperties() => new[] { "Cartuchos" };
     }
 }
