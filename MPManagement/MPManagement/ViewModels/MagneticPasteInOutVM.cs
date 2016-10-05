@@ -40,9 +40,8 @@ namespace MPManagement.ViewModels
         public ParameterCommand CartridgeIdEnterCommand => _cartridgeIdEnterCommand;
 
         private ICollection<Cartucho> _cartuchoList;
-        public ObservableCollection<Cartucho> CartuchoStateZeroList { get; set; }
-        public ObservableCollection<Cartucho> CartuchoStateOneList { get; set; }
-        public ObservableCollection<Cartucho> CartuchoStateTwoList { get; set; }
+
+        public ObservableCollection<Cartucho> CartuchoUIList { get; set; }
 
         public ICollection<Refrigerador> RefrigeratorList { get; set; }
 
@@ -161,9 +160,7 @@ namespace MPManagement.ViewModels
                     else
                         _cartuchoList = _cartuchoList.Concat(RefrigeratorList.ElementAt(i).Cartuchos.ToList()).ToList();
                 }
-                CartuchoStateZeroList = new ObservableCollection<Cartucho>(_cartuchoList.ToList().Where( c => c.Estado == ZERO_STATE));
-                CartuchoStateOneList = new ObservableCollection<Cartucho>(_cartuchoList.ToList().Where(c => c.Estado == ONE_STATE));
-                CartuchoStateTwoList = new ObservableCollection<Cartucho>(_cartuchoList.ToList().Where(c => c.Estado == TWO_STATE));
+                CartuchoUIList = new ObservableCollection<Cartucho>(_cartuchoList.ToList());
             }
         }
 
@@ -230,7 +227,10 @@ namespace MPManagement.ViewModels
             };
             /*cartuchoBusiness.InsertCartucho(cartucho);
             CartuchoList.Add(cartucho);*/
-            //CartuchoList.ElementAt(2).Estado = 0;
+            CartuchoUIList.ElementAt(1).Estado = 1;
+            CartuchoUIList.ElementAt(2).Estado = 1;
+            CartuchoUIList.ElementAt(3).Estado = 1;
+            CartuchoUIList.ElementAt(4).Estado = 1;
 
             EmployeeNameBoxEnabled = true;
             RefrigeratorIdBoxEnabled = false;

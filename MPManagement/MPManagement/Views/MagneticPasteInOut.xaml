@@ -144,7 +144,7 @@
             </Grid.ColumnDefinitions>
 
             <DataGrid Grid.Row="1" Grid.Column="0"
-                      Margin="0,10,0,10" ItemsSource="{Binding CartuchoStateZeroList, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                      Margin="0,10,0,10" ItemsSource="{Binding CartuchoUIList, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                       Background="#00897B"
                       RowHeight="36"                      
                       AutoGenerateColumns="False"
@@ -195,7 +195,7 @@
 
 
             <DataGrid Grid.Row="1" Grid.Column="1"
-                      Margin="0,10,0,10" ItemsSource="{Binding CartuchoStateOneList, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                      Margin="0,10,0,10" ItemsSource="{Binding CartuchoUIList, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                       Background="#00897B"
                       RowHeight="36"                      
                       AutoGenerateColumns="False"
@@ -242,7 +242,7 @@
             </DataGrid>
 
             <DataGrid Grid.Row="1" Grid.Column="2"
-                      Margin="0,10,0,10" ItemsSource="{Binding CartuchoStateTwoList, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                      Margin="0,10,0,10" ItemsSource="{Binding CartuchoUIList, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                       Background="#00897B"
                       RowHeight="36"                      
                       AutoGenerateColumns="False"
