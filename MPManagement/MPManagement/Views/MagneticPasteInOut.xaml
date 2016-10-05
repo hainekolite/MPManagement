@@ -15,6 +15,7 @@
             <converters:IntZeroStateToVisibilityConverter x:Key="IntZeroStateToVisibilityConverter"/>
             <converters:IntFirstStateToVisibilityConverter x:Key="IntFirstStateToVisibilityConverter"/>
             <converters:IntSecondStateToVisibilityConverter x:Key="IntSecondStateToVisibilityConverter"/>
+            <converters:DateTimeToBackGroundColorConverter x:Key="DateTimeToBackGroundColorConverter"/>
         </ResourceDictionary>
     </ContentControl.Resources>
 
@@ -69,7 +70,7 @@
                      Margin="10"
                      FontSize="26"
                      Foreground="#00695C"
-                     Text="{Binding EmployeeName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                     Text="{Binding EmployeeName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      IsEnabled="{Binding EmployeeNameBoxEnabled, UpdateSourceTrigger=PropertyChanged}"
                      MaxLength="50">
 
@@ -84,7 +85,7 @@
                      Margin="10"
                      FontSize="26"
                      Foreground="#00695C"
-                     Text="{Binding RefrigeratorId, UpdateSourceTrigger=PropertyChanged}"
+                     Text="{Binding RefrigeratorId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      IsEnabled="{Binding RefrigeratorIdBoxEnabled, UpdateSourceTrigger=PropertyChanged}"
                      MaxLength="50">
 
@@ -100,7 +101,7 @@
                      Margin="10"
                      FontSize="26"
                      Foreground="#00695C"
-                     Text="{Binding CartridgeId,UpdateSourceTrigger=PropertyChanged}"
+                     Text="{Binding CartridgeId, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                      IsEnabled="{Binding CartridgeIdBoxEnabled, UpdateSourceTrigger=PropertyChanged}"
                      MaxLength="50">
 
@@ -144,7 +145,7 @@
             </Grid.ColumnDefinitions>
 
             <DataGrid Grid.Row="1" Grid.Column="0"
-                      Margin="0,10,0,10" ItemsSource="{Binding CartuchoUIList, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                      Margin="0,10,0,10" ItemsSource="{Binding CartridgeList, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                       Background="#00897B"
                       RowHeight="36"                      
                       AutoGenerateColumns="False"
@@ -195,7 +196,7 @@
 
 
             <DataGrid Grid.Row="1" Grid.Column="1"
-                      Margin="0,10,0,10" ItemsSource="{Binding CartuchoUIList, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                      Margin="0,10,0,10" ItemsSource="{Binding CartridgeList, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                       Background="#00897B"
                       RowHeight="36"                      
                       AutoGenerateColumns="False"
@@ -211,7 +212,7 @@
 
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
-                        <Setter Property="Visibility" Value="{Binding Estado, Mode=OneWay, Converter={StaticResource IntFirstStateToVisibilityConverter}}"/>
+                        <Setter Property="Visibility" Value="{Binding Estado, Mode=OneWay, Converter={StaticResource IntFirstStateToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                     </Style>
                 </DataGrid.RowStyle>
                 
@@ -224,7 +225,7 @@
                 </DataGrid.ColumnHeaderStyle>
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn MinWidth="64" Header="En Refrigerador" Binding="{Binding NumeroDeCartucho, Mode=OneTime}" Width="*">
+                    <DataGridTextColumn MinWidth="64" Header="En Ambientacion" Binding="{Binding NumeroDeCartucho, Mode=OneTime}" Width="*">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -234,7 +235,7 @@
 
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="DataGridCell">
-                                <Setter Property="Background" Value="AliceBlue"/>
+                                <Setter Property="Background" Value="{Binding FechaSalida,Mode=OneWay, Converter={StaticResource DateTimeToBackGroundColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                             </Style>
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
@@ -242,7 +243,7 @@
             </DataGrid>
 
             <DataGrid Grid.Row="1" Grid.Column="2"
-                      Margin="0,10,0,10" ItemsSource="{Binding CartuchoUIList, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                      Margin="0,10,0,10" ItemsSource="{Binding CartridgeList, Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
                       Background="#00897B"
                       RowHeight="36"                      
                       AutoGenerateColumns="False"
@@ -270,7 +271,7 @@
                 </DataGrid.ColumnHeaderStyle>
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn MinWidth="64" Header="En Refrigerador" Binding="{Binding NumeroDeCartucho, Mode=OneTime}" Width="*">
+                    <DataGridTextColumn MinWidth="64" Header="En Maquina DEK" Binding="{Binding NumeroDeCartucho, Mode=OneTime}" Width="*">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />

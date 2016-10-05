@@ -4,6 +4,7 @@ using SPManagement.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -24,8 +25,8 @@ namespace MPManagement.ViewModels
         //Hacerlo un instance para que lo compartan In y Out y no cargar dos viewModels
         private readonly RefrigeradorBusiness refrigeradorBusiness;
         private readonly CartuchoBusiness cartuchoBusiness;
-        private Refrigerador refrigerador;
-        private Cartucho cartucho;
+        private Refrigerador refrigerator;
+        private Cartucho cartridge;
 
         private readonly ParameterCommand _clearBoxesCommand;
         public ParameterCommand ClearBoxesCommand => _clearBoxesCommand;
@@ -39,9 +40,9 @@ namespace MPManagement.ViewModels
         private readonly ParameterCommand _cartridgeIdEnterCommand;
         public ParameterCommand CartridgeIdEnterCommand => _cartridgeIdEnterCommand;
 
-        private ICollection<Cartucho> _cartuchoList;
+        private ICollection<Cartucho> _cartridgeList;
 
-        public ObservableCollection<Cartucho> CartuchoUIList { get; set; }
+        public ObservableCollection<Cartucho> CartridgeList { get; set; }
 
         public ICollection<Refrigerador> RefrigeratorList { get; set; }
 
@@ -129,10 +130,18 @@ namespace MPManagement.ViewModels
             }
         }
 
+        private readonly bool isInOrOut;
+        private readonly bool isOutOrReturn;
+
         #endregion Properties
 
-        public MagneticPasteInOutVM()
+        #region Constructor
+
+        public MagneticPasteInOutVM(bool option, bool flag)
         {
+            isInOrOut = option;
+            isOutOrReturn = flag;
+
             _clearBoxesCommand = new ParameterCommand(ClearAllBoxes);
 
             _employeeNameEnterCommand = new ParameterCommand(EmployeeBoxEnterKey);
@@ -150,37 +159,73 @@ namespace MPManagement.ViewModels
             refrigeradorBusiness = new RefrigeradorBusiness();
             cartuchoBusiness = new CartuchoBusiness();
 
+            UpdateList();
+        }
+
+        #endregion Constructor
+
+        #region UpdatingList
+
+        private void UpdateList()
+        {
             RefrigeratorList = refrigeradorBusiness.GetAllRefrigeratorsByIQueryable().ToList();
             if (RefrigeratorList != null)
             {
-                for (int i = 0; i<RefrigeratorList.Count; i++)
+                for (int i = 0; i < RefrigeratorList.Count; i++)
                 {
                     if (i == 0)
-                        _cartuchoList = RefrigeratorList.ElementAt(i).Cartuchos.ToList();
+                        _cartridgeList = RefrigeratorList.ElementAt(i).Cartuchos.ToList();
                     else
-                        _cartuchoList = _cartuchoList.Concat(RefrigeratorList.ElementAt(i).Cartuchos.ToList()).ToList();
+                        _cartridgeList = _cartridgeList.Concat(RefrigeratorList.ElementAt(i).Cartuchos.ToList()).ToList();
                 }
-                CartuchoUIList = new ObservableCollection<Cartucho>(_cartuchoList.ToList());
+                CartridgeList = new ObservableCollection<Cartucho>(_cartridgeList.ToList());
             }
         }
+
+        #endregion UpdatingList
+
+        #region SQLRawValidations
+
+        private bool isEmployeeValid()
+        {
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["NexusPCSDbContext"].ConnectionString; ;
+            string query = "SELECT * FROM Users";
+
+            SqlConnection connection = new SqlConnection(connectionString);
+            SqlCommand command = new SqlCommand(query, connection);
+            connection.Open();
+            SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                string name = (reader["Name"].ToString() + " " + reader["LastName"].ToString()).ToUpper();
+                if (Regex.Replace(EmployeeName, " ", string.Empty).ToUpper().Equals(Regex.Replace(name, " ", string.Empty)))
+                {
+                    connection.Close();
+                    return (true);
+                }
+            }
+            connection.Close();
+            return (false);
+        }
+
+        #endregion SQLRawValidations
+
+        #region EnterOnBoxes
 
         private void EmployeeBoxEnterKey(object box)
         {            
             TextBox refrigeratorIdBox = box as TextBox;
 
-            /*if ( EmployeeName existe en base de datos){
-
+            if (isEmployeeValid())
+            {
+                RefrigeratorIdBoxEnabled = true;
+                EmployeeNameBoxEnabled = false;
+                CartridgeIdBoxEnabled = false;
+                refrigeratorIdBox.Focus();
             }
             else
-            {
-                MessageBox.Show("Usuario no identificado");
-            }*/
-
-
-            RefrigeratorIdBoxEnabled = true;
-            EmployeeNameBoxEnabled = false;
-            CartridgeIdBoxEnabled = false;
-            refrigeratorIdBox.Focus();
+                MessageBox.Show("Nombre de Empleado no Valido favor de consultar con su supervisor", "ERROR");
+            
         }
 
         private void RefrigeratorIdBoxEnterKey(object box)
@@ -189,7 +234,7 @@ namespace MPManagement.ViewModels
             var query = refrigeradorBusiness.GetRefrigeradorByIQueriable(Regex.Replace(RefrigeratorId, " ", string.Empty));
             if (query != null)
             {
-                refrigerador = query;
+                refrigerator = query;
                 EmployeeNameBoxEnabled = false;
                 RefrigeratorIdBoxEnabled = false;
                 CartridgeIdBoxEnabled = true;
@@ -198,7 +243,7 @@ namespace MPManagement.ViewModels
             else
             {
                 MessageBox.Show("Refrigerador no identificado");
-                refrigerador = null;
+                refrigerator = null;
             }
         }
 
@@ -206,42 +251,12 @@ namespace MPManagement.ViewModels
         {
             TextBox employeeNameBox = box as TextBox;
 
-            /*if ( CartridgeId existe en base de datos){
-                
-            }
+            if (isInOrOut)
+                InsertCartridgeToRefrigerator(ref employeeNameBox);
+            else if (isOutOrReturn)
+                UpdateCartridgeState(ref employeeNameBox, ZERO_STATE, ONE_STATE);
             else
-            {
-                MessageBox.Show("Cartucho no identificado");
-            }*/
-
-            //do some action for the datagrid
-
-            cartucho = new Cartucho()
-            {
-                NumeroDeCartucho = CartridgeId,
-                FechaEntrada = DateTime.Now,
-                FechaSalida = DateTime.MaxValue,
-                FechaRecepcion = DateTime.MaxValue,
-                Estado = 0,
-                RefrigeradorId = refrigerador.Id
-            };
-            /*cartuchoBusiness.InsertCartucho(cartucho);
-            CartuchoList.Add(cartucho);*/
-            CartuchoUIList.ElementAt(1).Estado = 1;
-            CartuchoUIList.ElementAt(2).Estado = 1;
-            CartuchoUIList.ElementAt(3).Estado = 1;
-            CartuchoUIList.ElementAt(4).Estado = 1;
-
-            EmployeeNameBoxEnabled = true;
-            RefrigeratorIdBoxEnabled = false;
-            CartridgeIdBoxEnabled = false;
-
-            EmployeeName = string.Empty;
-            RefrigeratorId = string.Empty;
-            CartridgeId = string.Empty;
-
-            employeeNameBox.Focus();
-
+                UpdateCartridgeState(ref employeeNameBox, ONE_STATE, ZERO_STATE);
         }
 
         private void ClearAllBoxes(object boxes)
@@ -257,11 +272,92 @@ namespace MPManagement.ViewModels
             RefrigeratorIdBoxEnabled = false;
             CartridgeIdBoxEnabled = false;
 
-            refrigerador = null;
-            cartucho = null;
+            refrigerator = null;
+            cartridge = null;
 
             EmployeeBox.Focus();
         }
+
+        #endregion EnterOnBoxes
+
+        #region InsertUpdateCartridgeMethods
+
+        private void InsertCartridgeToRefrigerator(ref TextBox box)
+        {
+            cartridge = new Cartucho()
+            {
+                NumeroDeCartucho = CartridgeId,
+                FechaEntrada = DateTime.Now,
+                FechaSalida = DateTime.MaxValue,
+                FechaRecepcion = DateTime.MaxValue,
+                Estado = ZERO_STATE,
+                RefrigeradorId = refrigerator.Id
+            };
+            var query = cartuchoBusiness.GetAllCartuchosByRefrigeradorIdByIQueryable(refrigerator.Id).Where(c => c.NumeroDeCartucho == cartridge.NumeroDeCartucho).FirstOrDefault();
+            if (query == null)
+            {
+                CartridgeList.Add(cartridge);
+                cartuchoBusiness.InsertCartucho(cartridge);
+                EmployeeNameBoxEnabled = true;
+                RefrigeratorIdBoxEnabled = false;
+                CartridgeIdBoxEnabled = false;
+
+                EmployeeName = string.Empty;
+                RefrigeratorId = string.Empty;
+                CartridgeId = string.Empty;
+
+                box.Focus();
+                MessageBox.Show("Cartucho introducido exitosamente");
+            }
+            else
+                MessageBox.Show("El cartucho ya se encuentra registrado dentro del refrigerador especificado");
+        }
+
+
+        private void UpdateCartridgeState(ref TextBox box, int previousState, int newState)
+        {
+            var query = cartuchoBusiness.GetAllCartuchosByRefrigeradorIdByIQueryable(refrigerator.Id).ToList().Where(c => c.NumeroDeCartucho == CartridgeId).FirstOrDefault();
+            if (query != null)
+            {
+                if (query.Estado == previousState)
+                {
+                    var cartridge = CartridgeList.Where(c => c.Id == query.Id).ToList().FirstOrDefault();
+                
+                    if (newState == ZERO_STATE)
+                    {
+                        cartridge.FechaSalida = DateTime.MaxValue;
+                        cartridge.FechaEntrada = DateTime.Now;
+                        query.FechaSalida = DateTime.MaxValue;
+                        query.FechaEntrada = DateTime.Now;
+                    }
+                    else
+                    {
+                        query.FechaSalida = DateTime.Now;
+                        cartridge.FechaSalida = DateTime.Now;
+                    }
+
+                    cartridge.Estado = newState;
+                    query.Estado = newState;
+
+                    cartuchoBusiness.UpdateCartucho(query);
+                    EmployeeNameBoxEnabled = true;
+                    RefrigeratorIdBoxEnabled = false;
+                    CartridgeIdBoxEnabled = false;
+
+                    EmployeeName = string.Empty;
+                    RefrigeratorId = string.Empty;
+                    CartridgeId = string.Empty;
+
+                    box.Focus();
+                }
+                else
+                    MessageBox.Show("El cartucho seleccionado no se encuentra en alguno de los refrigeradores", "ERROR");
+            }
+            else
+                MessageBox.Show("El cartucho seleccionado no se encuentra relacionado al refrigerador seleccionado o no se encuentra registrado", "ERROR");
+        }
+
+        #endregion InsertUpdateCartridgeMethods
 
     }
 }

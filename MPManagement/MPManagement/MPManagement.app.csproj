@@ -45,6 +45,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -71,6 +72,7 @@
     <Compile Include="ViewModels\MagneticPasteBinnacleVM.cs" />
     <Compile Include="ViewModels\MagneticPasteInOutVM.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\Converters\DateTimeToBackGroundColorConverter.cs" />
     <Compile Include="Views\Converters\IntZeroStateToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\IntSecondStateToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\IntFirstStateToVisibilityConverter.cs" />

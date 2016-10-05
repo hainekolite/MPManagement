@@ -31,5 +31,11 @@ namespace SPManagement.Business
             unitOfWork.CommitChanges();
         }
 
+        public void UpdateCartucho(Cartucho cartucho)
+        {
+            unitOfWork.CartuchoRepository.Update(cartucho);
+            unitOfWork.CommitChanges();
+        }
+
     }
 }

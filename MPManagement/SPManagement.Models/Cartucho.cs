@@ -22,8 +22,34 @@ namespace SPManagement.Models
                 OnPropertyChanged();
             }
         }
-        public DateTime FechaEntrada { get; set; }
-        public DateTime FechaSalida { get; set; }
+        private DateTime _fechaEntrada;
+        public DateTime FechaEntrada
+        {
+            get
+            {
+                return (_fechaEntrada);
+            }
+            set
+            {
+                _fechaEntrada = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private DateTime _fechaSalida;
+        public DateTime FechaSalida
+        {
+            get
+            {
+                return (_fechaSalida);
+            }
+            set
+            {
+                _fechaSalida = value;
+                OnPropertyChanged();
+            }
+        }
+
         public DateTime FechaRecepcion { get; set; }
         private int _estado;
         public int Estado

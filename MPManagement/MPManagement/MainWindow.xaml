@@ -28,7 +28,7 @@
                 <DataTemplate>
                     <StackPanel Margin="13" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <!-- <Image Source="{Binding Icon, Mode=OneTime}" Width="22" Height="22" /> -->
-                        <TextBlock Text="{Binding Text, Mode=OneTime}" FontSize="26" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="13,0"/>
+                        <TextBlock Text="{Binding Text, Mode=OneTime}" FontSize="16" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="13,0"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -36,7 +36,7 @@
             <!-- cada elemento dentro del listbox -->
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
-                    <Setter Property="Height" Value="60"/>
+                    <Setter Property="Height" Value="46"/>
                     <Setter Property="ToolTip" Value="{Binding Text}"/>
                     <Setter Property="Template">
                         <Setter.Value>
