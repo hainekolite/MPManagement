@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MPManagement.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,9 @@ namespace MPManagement.Views
         public MagneticPasteInOut()
         {
             InitializeComponent();
+            this.Unloaded += UnloadedContentControl;
         }
+
+        private void UnloadedContentControl(object sender, RoutedEventArgs e) => (this.DataContext as MagneticPasteInOutVM).Dispose();
     }
 }

@@ -1,4 +1,5 @@
-﻿using MPManagement.ViewModels.Commands;
+﻿using MPManagement.Contracts;
+using MPManagement.ViewModels.Commands;
 using SPManagement.Business;
 using SPManagement.Models;
 using System;
@@ -11,10 +12,12 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace MPManagement.ViewModels
 {
-    public class MagneticPasteInOutVM : ViewModelBase
+    public class MagneticPasteInOutVM : ViewModelBase, IDisposeDataContext
     {
         #region Properties
 
@@ -133,6 +136,9 @@ namespace MPManagement.ViewModels
         private readonly bool isInOrOut;
         private readonly bool isOutOrReturn;
 
+        DispatcherTimer dispatcherTimer;
+
+
         #endregion Properties
 
         #region Constructor
@@ -141,7 +147,12 @@ namespace MPManagement.ViewModels
         {
             isInOrOut = option;
             isOutOrReturn = flag;
-
+            
+            dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            dispatcherTimer.Tick += new EventHandler(DispatcherTimerTick);
+            dispatcherTimer.Interval = new TimeSpan(0, 1, 0);
+            dispatcherTimer.Start();
+            
             _clearBoxesCommand = new ParameterCommand(ClearAllBoxes);
 
             _employeeNameEnterCommand = new ParameterCommand(EmployeeBoxEnterKey);
@@ -178,7 +189,8 @@ namespace MPManagement.ViewModels
                     else
                         _cartridgeList = _cartridgeList.Concat(RefrigeratorList.ElementAt(i).Cartuchos.ToList()).ToList();
                 }
-                CartridgeList = new ObservableCollection<Cartucho>(_cartridgeList.ToList());
+                CartridgeList = new ObservableCollection<Cartucho>(_cartridgeList.ToList().OrderByDescending(c => c.FechaSalida));
+                OnPropertyChanged("CartridgeList");
             }
         }
 
@@ -358,6 +370,25 @@ namespace MPManagement.ViewModels
         }
 
         #endregion InsertUpdateCartridgeMethods
+
+        #region TimerForUpdate
+
+        private void DispatcherTimerTick(object sender, EventArgs e)
+        {
+            UpdateList();
+        }
+
+        #endregion
+
+        #region DisposeableItems
+
+
+        public void Dispose()
+        {
+            this.dispatcherTimer.Stop();
+        }
+
+        #endregion DisposeableItems
 
     }
 }

@@ -65,6 +65,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Contracts\IDisposeDataContext.cs" />
     <Compile Include="MainWindowVM.cs" />
     <Compile Include="ViewModels\Commands\ParameterCommand.cs" />
     <Compile Include="ViewModels\Commands\RelayCommand.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Views\Converters\IntSecondStateToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\IntFirstStateToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\MultiValueConverter.cs" />
+    <Compile Include="Views\Converters\OutDateToHoursLeftForEnviorement.cs" />
     <Compile Include="Views\MagneticPasteBinnacle.xaml.cs">
       <DependentUpon>MagneticPasteBinnacle.xaml</DependentUpon>
     </Compile>

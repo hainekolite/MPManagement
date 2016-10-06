@@ -5,10 +5,10 @@
              xmlns:converters="clr-namespace:MPManagement.Views.Converters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MPManagement.Views"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="768" d:DesignWidth="1000">
-
-
+    
+    
     <ContentControl.Resources>
         <ResourceDictionary>
             <converters:MultiValueConverter x:Key="MultiValueConverter"/>
@@ -16,6 +16,7 @@
             <converters:IntFirstStateToVisibilityConverter x:Key="IntFirstStateToVisibilityConverter"/>
             <converters:IntSecondStateToVisibilityConverter x:Key="IntSecondStateToVisibilityConverter"/>
             <converters:DateTimeToBackGroundColorConverter x:Key="DateTimeToBackGroundColorConverter"/>
+            <converters:OutDateToHoursLeftForEnviorement x:Key="OutDateToHoursLeftForEnviorement"/>
         </ResourceDictionary>
     </ContentControl.Resources>
 
@@ -236,6 +237,7 @@
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Setter Property="Background" Value="{Binding FechaSalida,Mode=OneWay, Converter={StaticResource DateTimeToBackGroundColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Setter Property="ToolTip" Value="{Binding FechaSalida, Mode=OneWay, Converter={StaticResource OutDateToHoursLeftForEnviorement}, UpdateSourceTrigger=PropertyChanged}"/>
                             </Style>
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
