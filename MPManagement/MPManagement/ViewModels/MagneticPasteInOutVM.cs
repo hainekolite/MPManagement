@@ -31,6 +31,15 @@ namespace MPManagement.ViewModels
         private Refrigerador refrigerator;
         private Cartucho cartridge;
 
+        private readonly ParameterCommand _solderingPasteInCommand;
+        public ParameterCommand SolderingPasteInCommand => _solderingPasteInCommand;
+
+        private readonly ParameterCommand _solderingPasteOutCommand;
+        public ParameterCommand SolderingPasteOutCommand => _solderingPasteOutCommand;
+
+        private readonly ParameterCommand _solderingPasteReturnCommand;
+        public ParameterCommand SolderingPasteReturnCommand => _solderingPasteReturnCommand;
+
         private readonly ParameterCommand _clearBoxesCommand;
         public ParameterCommand ClearBoxesCommand => _clearBoxesCommand;
 
@@ -135,7 +144,19 @@ namespace MPManagement.ViewModels
 
         private readonly bool isInOrOut;
         private readonly bool isOutOrReturn;
-
+        private int _option;
+        public int Option
+        {
+            get
+            {
+                return (_option);
+            }
+            set
+            {
+                _option = value;
+                OnPropertyChanged();
+            }
+        }
         DispatcherTimer dispatcherTimer;
 
 
@@ -143,16 +164,18 @@ namespace MPManagement.ViewModels
 
         #region Constructor
 
-        public MagneticPasteInOutVM(bool option, bool flag)
+        public MagneticPasteInOutVM()
         {
-            isInOrOut = option;
-            isOutOrReturn = flag;
-            
+            Option = 0;
+
             dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(DispatcherTimerTick);
             dispatcherTimer.Interval = new TimeSpan(0, 1, 0);
             dispatcherTimer.Start();
-            
+
+            _solderingPasteInCommand = new ParameterCommand(SolderPasteIn);
+            _solderingPasteOutCommand = new ParameterCommand(SolderPasteOut);
+            _solderingPasteReturnCommand = new ParameterCommand(SolderPasteReturn);
             _clearBoxesCommand = new ParameterCommand(ClearAllBoxes);
 
             _employeeNameEnterCommand = new ParameterCommand(EmployeeBoxEnterKey);
@@ -263,11 +286,11 @@ namespace MPManagement.ViewModels
         {
             TextBox employeeNameBox = box as TextBox;
 
-            if (isInOrOut)
+            if (Option.Equals(ZERO_STATE))
                 InsertCartridgeToRefrigerator(ref employeeNameBox);
-            else if (isOutOrReturn)
+            else if (Option.Equals(ONE_STATE))
                 UpdateCartridgeState(ref employeeNameBox, ZERO_STATE, ONE_STATE);
-            else
+            else if (Option.Equals(TWO_STATE))
                 UpdateCartridgeState(ref employeeNameBox, ONE_STATE, ZERO_STATE);
         }
 
@@ -291,6 +314,75 @@ namespace MPManagement.ViewModels
         }
 
         #endregion EnterOnBoxes
+
+        #region ButtonsForMainFunctions
+
+        private void SolderPasteIn(object boxes)
+        {
+            var values = boxes as object[];
+            TextBox EmployeeBox = values[0] as TextBox;
+
+            EmployeeName = string.Empty;
+            RefrigeratorId = string.Empty;
+            CartridgeId = string.Empty;
+
+            EmployeeNameBoxEnabled = true;
+            RefrigeratorIdBoxEnabled = false;
+            CartridgeIdBoxEnabled = false;
+
+            refrigerator = null;
+            cartridge = null;
+
+            Option = 0;
+
+            EmployeeBox.Focus();
+        }
+
+        private void SolderPasteOut(object boxes)
+        {
+            var values = boxes as object[];
+            TextBox EmployeeBox = values[0] as TextBox;
+
+            EmployeeName = string.Empty;
+            RefrigeratorId = string.Empty;
+            CartridgeId = string.Empty;
+
+            EmployeeNameBoxEnabled = true;
+            RefrigeratorIdBoxEnabled = false;
+            CartridgeIdBoxEnabled = false;
+
+            refrigerator = null;
+            cartridge = null;
+
+            Option = 1;
+
+            EmployeeBox.Focus();
+        }
+
+        private void SolderPasteReturn(object boxes)
+        {
+            var values = boxes as object[];
+            TextBox EmployeeBox = values[0] as TextBox;
+
+            EmployeeName = string.Empty;
+            RefrigeratorId = string.Empty;
+            CartridgeId = string.Empty;
+
+            EmployeeNameBoxEnabled = true;
+            RefrigeratorIdBoxEnabled = false;
+            CartridgeIdBoxEnabled = false;
+
+            refrigerator = null;
+            cartridge = null;
+
+            Option = 2;
+
+            EmployeeBox.Focus();
+        }
+
+
+
+        #endregion ButtonsForMainFunctions
 
         #region InsertUpdateCartridgeMethods
 

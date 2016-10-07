@@ -9,28 +9,24 @@ using System.Windows.Media;
 
 namespace MPManagement.Views.Converters
 {
-    public class DateTimeToBackGroundColorConverter : IValueConverter
+    public class IntTwoToBackGroundConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            TimeSpan t = DateTime.Now.Subtract((DateTime)value);
-            int DaysInhours = t.Days * 24;
-            int Hours = t.Hours;
-            int Minutes = t.Minutes;
             var converter = new System.Windows.Media.BrushConverter();
+            var brush = (SolidColorBrush)converter.ConvertFromString("#00ACC1");
+            var nonBrush = (SolidColorBrush)converter.ConvertFromString("#006064");
 
-            if (t.Hours < 6 && t.Days * 24 == 0)
-                return ((SolidColorBrush)converter.ConvertFromString("#EF6C00"));
-            else if (DaysInhours >= 0 && DaysInhours <= 24 && Hours <= 23 && Minutes <= 59)
-                return ((SolidColorBrush)converter.ConvertFromString("#00695C"));
+            int option = (int)value;
+            if (option.Equals(2))
+                return (brush);
             else
-                return ((SolidColorBrush)converter.ConvertFromString("#D32F2F"));
-
+                return (nonBrush);
         }
+
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
-
     }
 }
