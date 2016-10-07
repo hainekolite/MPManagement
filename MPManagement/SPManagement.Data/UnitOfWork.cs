@@ -23,7 +23,7 @@ namespace SPManagement.Data
 
         public IRepository<Refrigerador> RefrigeradorRepository { get; set; }
         public IRepository<Cartucho> CartuchoRepository { get; set; }
-
+        public IRepository<Tiempo> TiempoRepository { get; set; }
         #endregion Repositories
 
         public UnitOfWork()
@@ -37,6 +37,7 @@ namespace SPManagement.Data
         {
             RefrigeradorRepository = new RefrigeradorRepository(context) as IRepository<Refrigerador>;
             CartuchoRepository = new CartuchoRepository(context) as IRepository<Cartucho>;
+            TiempoRepository = new TiempoRepository(context) as IRepository<Tiempo>;
         }
 
         public void CommitChanges()

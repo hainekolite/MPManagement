@@ -51,6 +51,8 @@ namespace SPManagement.Models
         }
 
         public DateTime FechaRecepcion { get; set; }
+        public DateTime FechaTerminacion { get; set; }
+
         private int _estado;
         public int Estado
         {
@@ -61,6 +63,20 @@ namespace SPManagement.Models
             set
             {
                 _estado = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _nombreRefrigerador;
+        public string NombreRefrigerador
+        {
+            get
+            {
+                return (_nombreRefrigerador);
+            }
+            set
+            {
+                _nombreRefrigerador = value;
                 OnPropertyChanged();
             }
         }

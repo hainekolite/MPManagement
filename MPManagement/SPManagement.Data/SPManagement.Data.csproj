@@ -51,15 +51,16 @@
   <ItemGroup>
     <Compile Include="Contracts\IRepository.cs" />
     <Compile Include="Contracts\IUnitOfWork.cs" />
-    <Compile Include="Migrations\201610032218058_Initial.cs" />
-    <Compile Include="Migrations\201610032218058_Initial.Designer.cs">
-      <DependentUpon>201610032218058_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201610070544545_Initial.cs" />
+    <Compile Include="Migrations\201610070544545_Initial.Designer.cs">
+      <DependentUpon>201610070544545_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CartuchoRepository.cs" />
     <Compile Include="Repositories\GenericRepository.cs" />
     <Compile Include="Repositories\RefrigeradorRepository.cs" />
+    <Compile Include="Repositories\TiempoRepository.cs" />
     <Compile Include="SPManagementDbContext.cs" />
     <Compile Include="UnitOfWork.cs" />
   </ItemGroup>
@@ -78,8 +79,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201610032218058_Initial.resx">
-      <DependentUpon>201610032218058_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201610070544545_Initial.resx">
+      <DependentUpon>201610070544545_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

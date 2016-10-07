@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace MPManagement.Views.Converters
 {
-    public class IntZeroToBackGroundColorConverter : IValueConverter
+    public class BoolTrueToBackGroundColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -17,8 +17,8 @@ namespace MPManagement.Views.Converters
             var brush = (SolidColorBrush)converter.ConvertFromString("#00ACC1");
             var nonBrush = (SolidColorBrush)converter.ConvertFromString("#006064");
 
-            int option = (int)value;
-            if (option.Equals(0))
+            bool option = (bool)value;
+            if (option)
                 return (brush);
             else
                 return (nonBrush);

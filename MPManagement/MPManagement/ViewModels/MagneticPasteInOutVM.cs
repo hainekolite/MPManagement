@@ -37,8 +37,8 @@ namespace MPManagement.ViewModels
         private readonly ParameterCommand _solderingPasteOutCommand;
         public ParameterCommand SolderingPasteOutCommand => _solderingPasteOutCommand;
 
-        private readonly ParameterCommand _solderingPasteReturnCommand;
-        public ParameterCommand SolderingPasteReturnCommand => _solderingPasteReturnCommand;
+        private readonly ParameterCommand _solderingPasteOptionCommand;
+        public ParameterCommand SolderingPasteOptionCommand => _solderingPasteOptionCommand;
 
         private readonly ParameterCommand _clearBoxesCommand;
         public ParameterCommand ClearBoxesCommand => _clearBoxesCommand;
@@ -144,8 +144,8 @@ namespace MPManagement.ViewModels
 
         private readonly bool isInOrOut;
         private readonly bool isOutOrReturn;
-        private int _option;
-        public int Option
+        private bool _option;
+        public bool Option
         {
             get
             {
@@ -166,7 +166,7 @@ namespace MPManagement.ViewModels
 
         public MagneticPasteInOutVM()
         {
-            Option = 0;
+            Option = true;
 
             dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(DispatcherTimerTick);
@@ -175,7 +175,7 @@ namespace MPManagement.ViewModels
 
             _solderingPasteInCommand = new ParameterCommand(SolderPasteIn);
             _solderingPasteOutCommand = new ParameterCommand(SolderPasteOut);
-            _solderingPasteReturnCommand = new ParameterCommand(SolderPasteReturn);
+            _solderingPasteOptionCommand = new ParameterCommand(SolderPasteManagementConfiguration);
             _clearBoxesCommand = new ParameterCommand(ClearAllBoxes);
 
             _employeeNameEnterCommand = new ParameterCommand(EmployeeBoxEnterKey);
@@ -286,12 +286,10 @@ namespace MPManagement.ViewModels
         {
             TextBox employeeNameBox = box as TextBox;
 
-            if (Option.Equals(ZERO_STATE))
+            if (Option)
                 InsertCartridgeToRefrigerator(ref employeeNameBox);
-            else if (Option.Equals(ONE_STATE))
+            else
                 UpdateCartridgeState(ref employeeNameBox, ZERO_STATE, ONE_STATE);
-            else if (Option.Equals(TWO_STATE))
-                UpdateCartridgeState(ref employeeNameBox, ONE_STATE, ZERO_STATE);
         }
 
         private void ClearAllBoxes(object boxes)
@@ -333,7 +331,7 @@ namespace MPManagement.ViewModels
             refrigerator = null;
             cartridge = null;
 
-            Option = 0;
+            Option = true;
 
             EmployeeBox.Focus();
         }
@@ -354,12 +352,12 @@ namespace MPManagement.ViewModels
             refrigerator = null;
             cartridge = null;
 
-            Option = 1;
+            Option = false;
 
             EmployeeBox.Focus();
         }
 
-        private void SolderPasteReturn(object boxes)
+        private void SolderPasteManagementConfiguration(object boxes)
         {
             var values = boxes as object[];
             TextBox EmployeeBox = values[0] as TextBox;
@@ -374,8 +372,6 @@ namespace MPManagement.ViewModels
 
             refrigerator = null;
             cartridge = null;
-
-            Option = 2;
 
             EmployeeBox.Focus();
         }

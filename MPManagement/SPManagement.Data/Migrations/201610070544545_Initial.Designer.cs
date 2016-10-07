@@ -13,7 +13,7 @@ namespace SPManagement.Data.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201610032218058_Initial"; }
+            get { return "201610070544545_Initial"; }
         }
         
         string IMigrationMetadata.Source

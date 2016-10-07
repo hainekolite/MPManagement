@@ -43,6 +43,7 @@
     <Compile Include="CartuchoBusiness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RefrigeradorBusiness.cs" />
+    <Compile Include="TiempoBusiness.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SPManagement.Data\SPManagement.Data.csproj">

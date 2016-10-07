@@ -54,6 +54,7 @@
     <Compile Include="Cartucho.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Refrigerador.cs" />
+    <Compile Include="Tiempo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

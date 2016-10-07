@@ -17,9 +17,8 @@
             <converters:IntSecondStateToVisibilityConverter x:Key="IntSecondStateToVisibilityConverter"/>
             <converters:DateTimeToBackGroundColorConverter x:Key="DateTimeToBackGroundColorConverter"/>
             <converters:OutDateToHoursLeftForEnviorement x:Key="OutDateToHoursLeftForEnviorement"/>
-            <converters:IntZeroToBackGroundColorConverter x:Key="IntZeroToBackGroundColorConverter"/>
-            <converters:IntOneToBackGroundColorConverter x:Key="IntOneToBackGroundColorConverter"/>
-            <converters:IntTwoToBackGroundConverter x:Key="IntTwoToBackGroundConverter"/>
+            <converters:BoolFalseToBackGroundColorConverter x:Key="BoolFalseToBackGroundColorConverter"/>
+            <converters:BoolTrueToBackGroundColorConverter x:Key="BoolTrueToBackGroundColorConverter"/>
         </ResourceDictionary>
     </ContentControl.Resources>
 
@@ -131,7 +130,7 @@
                 Height="50"  
                 VerticalAlignment="Top"
                 BorderBrush="Transparent"
-                Background="{Binding Option, Mode=OneWay, Converter={StaticResource IntZeroToBackGroundColorConverter}, UpdateSourceTrigger=PropertyChanged}"
+                Background="{Binding Option, Mode=OneWay, Converter={StaticResource BoolTrueToBackGroundColorConverter}, UpdateSourceTrigger=PropertyChanged}"
                 FontSize="26"
                 Foreground="White"
                 Content="Entrada"
@@ -152,7 +151,7 @@
                 Height="50"  
                 VerticalAlignment="Top"
                 BorderBrush="Transparent"
-                Background="{Binding Option, Mode=OneWay, Converter={StaticResource IntOneToBackGroundColorConverter}, UpdateSourceTrigger=PropertyChanged}"
+                Background="{Binding Option, Mode=OneWay, Converter={StaticResource BoolFalseToBackGroundColorConverter}, UpdateSourceTrigger=PropertyChanged}"
                 FontSize="26"
                 Foreground="White"
                 Content="Salida"
@@ -173,11 +172,11 @@
                 Height="50"  
                 VerticalAlignment="Top"
                 BorderBrush="Transparent"
-                Background="{Binding Option, Mode=OneWay, Converter={StaticResource IntTwoToBackGroundConverter}, UpdateSourceTrigger=PropertyChanged}"
+                Background="#E91E63"
                 FontSize="26"
                 Foreground="White"
-                Content="Retorno"
-                Command="{Binding SolderingPasteReturnCommand}">
+                Content="Config"
+                Command="{Binding SolderingPasteOptionCommand}">
 
                     <Button.CommandParameter>
                         <MultiBinding Converter="{StaticResource MultiValueConverter}">

@@ -74,12 +74,11 @@
     <Compile Include="ViewModels\MagneticPasteInOutVM.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\Converters\DateTimeToBackGroundColorConverter.cs" />
-    <Compile Include="Views\Converters\IntOneToBackGroundColorConverter.cs" />
-    <Compile Include="Views\Converters\IntTwoToBackGroundConverter.cs" />
+    <Compile Include="Views\Converters\BoolFalseToBackGroundColorConverter.cs" />
     <Compile Include="Views\Converters\IntZeroStateToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\IntSecondStateToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\IntFirstStateToVisibilityConverter.cs" />
-    <Compile Include="Views\Converters\IntZeroToBackGroundColorConverter.cs" />
+    <Compile Include="Views\Converters\BoolTrueToBackGroundColorConverter.cs" />
     <Compile Include="Views\Converters\MultiValueConverter.cs" />
     <Compile Include="Views\Converters\OutDateToHoursLeftForEnviorement.cs" />
     <Compile Include="Views\MagneticPasteBinnacle.xaml.cs">
