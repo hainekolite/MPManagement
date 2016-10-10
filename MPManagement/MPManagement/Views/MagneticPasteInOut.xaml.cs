@@ -25,5 +25,6 @@ namespace MPManagement.Views
         }
 
         private void UnloadedContentControl(object sender, RoutedEventArgs e) => (this.DataContext as MagneticPasteInOutVM).Dispose();
+
     }
 }

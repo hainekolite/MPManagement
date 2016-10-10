@@ -30,8 +30,10 @@ namespace MPManagement.ViewModels
         //Hacerlo un instance para que lo compartan In y Out y no cargar dos viewModels
         private readonly RefrigeradorBusiness refrigeradorBusiness;
         private readonly CartuchoBusiness cartuchoBusiness;
+        private readonly TiempoBusiness tiempoBusiness;
         private Refrigerador refrigerator;
         private Cartucho cartridge;
+        private Tiempo tiempo;
 
         private readonly ParameterCommand _solderingPasteInCommand;
         public ParameterCommand SolderingPasteInCommand => _solderingPasteInCommand;
@@ -157,8 +159,7 @@ namespace MPManagement.ViewModels
                 OnPropertyChanged();
             }
         }
-        DispatcherTimer dispatcherTimer;
-
+        private DispatcherTimer dispatcherTimer;
 
         #endregion Properties
 
@@ -168,9 +169,15 @@ namespace MPManagement.ViewModels
         {
             Option = true;
 
+            refrigeradorBusiness = new RefrigeradorBusiness();
+            cartuchoBusiness = new CartuchoBusiness();
+            tiempoBusiness = new TiempoBusiness();
+
+            tiempo = tiempoBusiness.GetAll().FirstOrDefault();
+
             dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(DispatcherTimerTick);
-            dispatcherTimer.Interval = new TimeSpan(0, 1, 0);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, tiempo.SegundosRefresco);
             dispatcherTimer.Start();
 
             _solderingPasteInCommand = new ParameterCommand(SolderPasteIn);
@@ -189,9 +196,6 @@ namespace MPManagement.ViewModels
             EmployeeName = string.Empty;
             RefrigeratorId = string.Empty;
             CartridgeId = string.Empty;
-
-            refrigeradorBusiness = new RefrigeradorBusiness();
-            cartuchoBusiness = new CartuchoBusiness();
 
             UpdateList();
         }
@@ -212,8 +216,8 @@ namespace MPManagement.ViewModels
                     else
                         _cartridgeList = _cartridgeList.Concat(RefrigeratorList.ElementAt(i).Cartuchos.ToList()).ToList();
                 }
-                CartridgeList = new ObservableCollection<Cartucho>(_cartridgeList.ToList().OrderByDescending(c => c.FechaSalida));
-                OnPropertyChanged("CartridgeList");
+                CartridgeList = new ObservableCollection<Cartucho>(_cartridgeList.ToList().OrderBy(c => c.FechaEntrada));
+                CartridgeList = new ObservableCollection<Cartucho>(CartridgeList.OrderByDescending(c => c.FechaSalida));
             }
         }
 
@@ -313,9 +317,19 @@ namespace MPManagement.ViewModels
             if (isCartridgeValid())
             {
                 if (Option)
+                {
                     InsertCartridgeToRefrigerator(ref employeeNameBox);
+                    CartridgeList = new ObservableCollection<Cartucho>(CartridgeList.ToList().OrderBy(c => c.FechaEntrada));
+                    CartridgeList = new ObservableCollection<Cartucho>(CartridgeList.OrderByDescending(c => c.FechaSalida));
+                    //OnPropertyChanged("CartridgeList");
+                }
                 else
+                {
                     UpdateCartridgeStateForOut(ref employeeNameBox);
+                    CartridgeList = new ObservableCollection<Cartucho>(CartridgeList.ToList().OrderBy(c => c.FechaEntrada));
+                    CartridgeList = new ObservableCollection<Cartucho>(CartridgeList.OrderByDescending(c => c.FechaSalida));
+                    //OnPropertyChanged("CartridgeList");
+                }
             }
             else
             {
@@ -517,6 +531,7 @@ namespace MPManagement.ViewModels
         private void DispatcherTimerTick(object sender, EventArgs e)
         {
             UpdateList();
+            OnPropertyChanged("CartridgeList");
         }
 
         #endregion
