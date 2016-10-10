@@ -216,7 +216,7 @@ namespace MPManagement.ViewModels
                     else
                         _cartridgeList = _cartridgeList.Concat(RefrigeratorList.ElementAt(i).Cartuchos.ToList()).ToList();
                 }
-                CartridgeList = new ObservableCollection<Cartucho>(_cartridgeList.ToList().OrderBy(c => c.FechaEntrada));
+                CartridgeList = new ObservableCollection<Cartucho>(_cartridgeList.Where(c=> c.Estado >= 0 && c.Estado <= 3).ToList().OrderBy(c => c.FechaEntrada));
                 CartridgeList = new ObservableCollection<Cartucho>(CartridgeList.OrderByDescending(c => c.FechaSalida));
                 SetTimeToEachElement();
                 OnPropertyChanged("CartridgeList");
@@ -540,7 +540,26 @@ namespace MPManagement.ViewModels
 
         private void DispatcherTimerTick(object sender, EventArgs e)
         {
+            CheckReturnedCartridges();
             UpdateList();
+        }
+
+        private void CheckReturnedCartridges()
+        {
+            var query = cartuchoBusiness.GetAll().Where(c => c.Estado == 3);
+            if (query != null)
+            {
+                var minTimeQuery = cartuchoBusiness.GetAll().Where(c => c.Estado == 0 || c.Estado == 3).OrderBy(c => c.FechaEntrada).FirstOrDefault();
+                foreach (var cartridge in query)
+                {
+                    TimeSpan t = DateTime.Now.Subtract(cartridge.FechaEntrada);
+                    if ((t.Hours + t.Days * 24) >= tiempo.HorasReposoTrasRetorno)
+                    {
+                        cartridge.FechaEntrada = minTimeQuery.FechaEntrada;
+                        cartuchoBusiness.UpdateCartucho(cartridge);
+                    }
+                }
+            }
         }
 
         #endregion
