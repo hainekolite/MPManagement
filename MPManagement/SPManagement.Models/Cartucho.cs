@@ -2,6 +2,7 @@ namespace SPManagement.Models
 {
     using System;
     using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity;
     using System.Linq;
     using System.Runtime.CompilerServices;
@@ -54,7 +55,7 @@ namespace SPManagement.Models
         public DateTime FechaTerminacion { get; set; }
 
         private int _estado;
-        public int Estado
+        public virtual int Estado
         {
             get
             {
@@ -77,6 +78,22 @@ namespace SPManagement.Models
             set
             {
                 _nombreRefrigerador = value;
+                OnPropertyChanged();
+            }
+        }
+
+        [NotMapped]
+        private Tiempo _tiempo;
+        [NotMapped]
+        public Tiempo Tiempo
+        {
+            get
+            {
+                return (_tiempo);
+            }
+            set
+            {
+                _tiempo = value;
                 OnPropertyChanged();
             }
         }

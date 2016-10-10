@@ -33,7 +33,7 @@ namespace MPManagement.ViewModels
         private readonly TiempoBusiness tiempoBusiness;
         private Refrigerador refrigerator;
         private Cartucho cartridge;
-        private Tiempo tiempo;
+        public Tiempo tiempo;
 
         private readonly ParameterCommand _solderingPasteInCommand;
         public ParameterCommand SolderingPasteInCommand => _solderingPasteInCommand;
@@ -218,7 +218,15 @@ namespace MPManagement.ViewModels
                 }
                 CartridgeList = new ObservableCollection<Cartucho>(_cartridgeList.ToList().OrderBy(c => c.FechaEntrada));
                 CartridgeList = new ObservableCollection<Cartucho>(CartridgeList.OrderByDescending(c => c.FechaSalida));
+                SetTimeToEachElement();
+                OnPropertyChanged("CartridgeList");
             }
+        }
+
+        private void SetTimeToEachElement()
+        {
+            for ( int i =0; i <CartridgeList.Count; i++)
+                CartridgeList.ElementAt(i).Tiempo = tiempo;
         }
 
         #endregion UpdatingList
@@ -319,16 +327,12 @@ namespace MPManagement.ViewModels
                 if (Option)
                 {
                     InsertCartridgeToRefrigerator(ref employeeNameBox);
-                    CartridgeList = new ObservableCollection<Cartucho>(CartridgeList.ToList().OrderBy(c => c.FechaEntrada));
-                    CartridgeList = new ObservableCollection<Cartucho>(CartridgeList.OrderByDescending(c => c.FechaSalida));
-                    //OnPropertyChanged("CartridgeList");
+                    UpdateList();
                 }
                 else
                 {
                     UpdateCartridgeStateForOut(ref employeeNameBox);
-                    CartridgeList = new ObservableCollection<Cartucho>(CartridgeList.ToList().OrderBy(c => c.FechaEntrada));
-                    CartridgeList = new ObservableCollection<Cartucho>(CartridgeList.OrderByDescending(c => c.FechaSalida));
-                    //OnPropertyChanged("CartridgeList");
+                    UpdateList();
                 }
             }
             else
@@ -417,7 +421,7 @@ namespace MPManagement.ViewModels
         private void InsertCartridgeToRefrigerator(ref TextBox box)
         {
             string cartridgeName = Regex.Replace(CartridgeId, " ", string.Empty);
-            var query = cartuchoBusiness.GetAllCartuchosByRefrigeradorIdByIQueryable(refrigerator.Id).Where(c => c.NumeroDeCartucho == cartridgeName).FirstOrDefault();
+            var query = cartuchoBusiness.GetAllCartuchosByIQueryable().Where(c => c.NumeroDeCartucho == cartridgeName).FirstOrDefault();
             if (query == null)
             {
                 cartridge = new Cartucho()
@@ -498,11 +502,17 @@ namespace MPManagement.ViewModels
                     var cartridge = CartridgeList.Where(c => c.Id == query.Id).ToList().FirstOrDefault();
                     if (cartridge != null)
                     {
-                        query.FechaSalida = DateTime.Now;
-                        cartridge.FechaSalida = DateTime.Now;
-                        cartridge.Estado = ONE_STATE;
-                        query.Estado = ONE_STATE;
-                        cartuchoBusiness.UpdateCartucho(query);
+                        var q = CartridgeList.Where(c => c.Estado == 0 || c.Estado == 3).ToList();
+                        if (CartridgeList.Where(c => c.Estado == 0 || c.Estado == 3).FirstOrDefault().NumeroDeCartucho.Equals(cartridge.NumeroDeCartucho))
+                        {
+                            query.FechaSalida = DateTime.Now;
+                            query.Estado = ONE_STATE;
+                            cartridge.FechaSalida = DateTime.Now;
+                            cartridge.Estado = ONE_STATE;
+                            cartuchoBusiness.UpdateCartucho(query);
+                        }
+                        else
+                            MessageBox.Show("El cartucho seleccionado existe, pero no debe de ser el primero en salir. Favor de seleccionar el primer cartucho en lista, o pulsar el boton actualizar en busca de cambios");
                     }
                     else
                         MessageBox.Show("El cartucho seleccionado existe pero la aplicacion no se encuentra actualizada, favor de actualizar la aplicacion antes de realizar el movimiento");
@@ -531,7 +541,6 @@ namespace MPManagement.ViewModels
         private void DispatcherTimerTick(object sender, EventArgs e)
         {
             UpdateList();
-            OnPropertyChanged("CartridgeList");
         }
 
         #endregion

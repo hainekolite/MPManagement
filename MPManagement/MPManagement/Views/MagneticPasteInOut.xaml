@@ -302,7 +302,7 @@
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Setter Property="Background" Value="#263238"/>
-                                <!--<Setter Property="ToolTip" Value="{Binding NombreRefrigerador, Mode=OneWay,  Converter={StaticResource RefrigeratorNameConverter}, UpdateSourceTrigger=PropertyChanged}"/> -->
+                                <Setter Property="ToolTip" Value="{Binding NombreRefrigerador, Mode=OneWay,  Converter={StaticResource RefrigeratorNameConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                             </Style>
                         </DataGridTextColumn.CellStyle>
                         
@@ -349,11 +349,30 @@
                                 <!-- <Setter Property="Background" Value="Black" /> -->
                             </Style>
                         </DataGridTextColumn.ElementStyle>
-
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="DataGridCell">
-                                <!--<Setter Property="Background" Value="{Binding FechaSalida,Mode=OneWay, Converter={StaticResource DateTimeToBackGroundColorConverter}, UpdateSourceTrigger=PropertyChanged}"/> -->
-                               <!-- <Setter Property="ToolTip" Value="{Binding FechaSalida, Mode=OneWay, Converter={StaticResource OutDateToHoursLeftForEnviorement}, UpdateSourceTrigger=PropertyChanged}"/> -->
+                                <Style.Setters>
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource DateTimeToBackGroundColorConverter}" Mode="OneWay" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding Path="FechaSalida" UpdateSourceTrigger="PropertyChanged"/>
+                                                <Binding Path="Tiempo" UpdateSourceTrigger="PropertyChanged"/>
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+
+                                    <Setter Property="ToolTip">
+                                        <Setter.Value>
+                                            <MultiBinding Converter="{StaticResource OutDateToHoursLeftForEnviorement}" Mode="OneWay" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding Path="FechaSalida" UpdateSourceTrigger="PropertyChanged"/>
+                                                <Binding Path="Tiempo" UpdateSourceTrigger="PropertyChanged"/>
+                                            </MultiBinding>
+                                        </Setter.Value>
+                                    </Setter>
+                                    
+                                </Style.Setters>
+                                <!--<Setter Property="Background" Value="{Binding FechaSalida,Mode=OneWay, Converter={StaticResource DateTimeToBackGroundColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>-->
+                                <!-- <Setter Property="ToolTip" Value="{Binding FechaSalida, Mode=OneWay, Converter={StaticResource OutDateToHoursLeftForEnviorement}, UpdateSourceTrigger=PropertyChanged}"/> -->
                             </Style>
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>

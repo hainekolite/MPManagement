@@ -11,14 +11,14 @@ using System.Windows.Media;
 
 namespace MPManagement.Views.Converters
 {
-    public class DateTimeToBackGroundColorConverter : IValueConverter
+    public class DateTimeToBackGroundColorConverter : IMultiValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            TiempoBusiness tiempoBusiness = new TiempoBusiness();
-            Tiempo tiempo = tiempoBusiness.GetAll().FirstOrDefault();
 
-            TimeSpan t = DateTime.Now.Subtract((DateTime)value);
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            Tiempo tiempo = values[1] as Tiempo;
+
+            TimeSpan t = DateTime.Now.Subtract((DateTime)values[0]);
             int DaysInhours = t.Days * 24;
             int Hours = t.Hours;
             int Minutes = t.Minutes;
@@ -30,12 +30,16 @@ namespace MPManagement.Views.Converters
                 return ((SolidColorBrush)converter.ConvertFromString("#00695C"));
             else
                 return ((SolidColorBrush)converter.ConvertFromString("#D32F2F"));
-
         }
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+
+        public object ConvertBack(object value, Type targetType, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
 
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
