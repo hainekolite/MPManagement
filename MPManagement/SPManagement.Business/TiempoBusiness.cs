@@ -20,5 +20,17 @@ namespace SPManagement.Business
         public ICollection<Tiempo> GetAll() => (unitOfWork.TiempoRepository.GetList());
 
         public IQueryable<Tiempo> GetAllTiemposByIQueryable() => unitOfWork.TiempoRepository.GetQuery();
+
+        public void UpdateTiempo(Tiempo tiempo)
+        {
+            unitOfWork.TiempoRepository.Update(tiempo);
+            unitOfWork.CommitChanges();
+        }
+
+        public void InsertTiempo(Tiempo tiempo)
+        {
+            unitOfWork.TiempoRepository.Insert(tiempo);
+            unitOfWork.CommitChanges();
+        }
     }
 }

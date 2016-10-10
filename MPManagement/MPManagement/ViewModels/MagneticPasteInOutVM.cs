@@ -1,5 +1,6 @@
 ﻿using MPManagement.Contracts;
 using MPManagement.ViewModels.Commands;
+using MPManagement.Views.dialogs;
 using SPManagement.Business;
 using SPManagement.Models;
 using System;
@@ -390,24 +391,10 @@ namespace MPManagement.ViewModels
 
         private void SolderPasteManagementConfiguration(object boxes)
         {
-            var values = boxes as object[];
-            TextBox EmployeeBox = values[0] as TextBox;
-
-            EmployeeName = string.Empty;
-            RefrigeratorId = string.Empty;
-            CartridgeId = string.Empty;
-
-            EmployeeNameBoxEnabled = true;
-            RefrigeratorIdBoxEnabled = false;
-            CartridgeIdBoxEnabled = false;
-
-            refrigerator = null;
-            cartridge = null;
-
-            EmployeeBox.Focus();
+            var configuration = new Configuration();
+            configuration.DataContext = new ConfigurationVM(configuration.Close);
+            configuration.ShowDialog();
         }
-
-
 
         #endregion ButtonsForMainFunctions
 

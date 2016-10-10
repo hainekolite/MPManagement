@@ -19,6 +19,7 @@
             <converters:OutDateToHoursLeftForEnviorement x:Key="OutDateToHoursLeftForEnviorement"/>
             <converters:BoolFalseToBackGroundColorConverter x:Key="BoolFalseToBackGroundColorConverter"/>
             <converters:BoolTrueToBackGroundColorConverter x:Key="BoolTrueToBackGroundColorConverter"/>
+            <converters:RefrigeratorNameConverter x:Key="RefrigeratorNameConverter"/>
         </ResourceDictionary>
     </ContentControl.Resources>
 
@@ -297,6 +298,7 @@
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Setter Property="Background" Value="#263238"/>
+                                <Setter Property="ToolTip" Value="{Binding NombreRefrigerador, Mode=OneWay,  Converter={StaticResource RefrigeratorNameConverter}, UpdateSourceTrigger=PropertyChanged}"/>
                             </Style>
                         </DataGridTextColumn.CellStyle>
                         
