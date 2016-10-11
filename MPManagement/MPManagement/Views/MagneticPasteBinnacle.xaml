@@ -5,8 +5,149 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MPManagement.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="768" d:DesignWidth="1000">
+    
+    <ContentControl.Resources>
+        <Style x:Key="styleCalendar" TargetType="{x:Type Calendar}">
+        <Setter Property="Template">
+            <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Calendar}">
+                        <Viewbox Height="400"
+                         Width="400">
+                        <CalendarItem x:Name="PART_CalendarItem"
+                                  Background="{TemplateBinding Background}"
+                                  BorderBrush="{TemplateBinding BorderBrush}"
+                                  BorderThickness="{TemplateBinding BorderThickness}"/>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        </Style>
+    </ContentControl.Resources>
+    
     <Grid>
-            
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width=".4*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height=".4*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Column="0" Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+        </Grid>
+
+        <Border BorderBrush="#00838F" BorderThickness="0,0,0,5" Margin="0,10,0,10" Grid.Row="0" Grid.Column="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height=".6*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Row="1" Grid.Column="0"
+                    Margin="10"
+                    FontSize="24"
+                    Background="#FF5252"
+                    Foreground="White"
+                    Content="Imprimir"/>
+            </Grid>
+        </Border>
+
+
+        <Grid Grid.Column="1" Margin="20,10,0,10"  Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2.5*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" Grid.Row="0" Background="#00838F">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Fecha inicial" Grid.Column="0" Grid.Row="0"
+                           Foreground="White"
+                           FontSize="26"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+
+                <DatePicker Name="FirstDate" Grid.Row="0" Grid.Column="1"
+                        CalendarStyle="{StaticResource styleCalendar}"
+                        Margin="0,0,0,0"
+                        FontSize="26"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="White"
+                        SelectedDate="{Binding InitialDate}"/>
+
+                <TextBlock Text="Fecha final" Grid.Column="0" Grid.Row="1"
+                           Foreground="White"
+                           FontSize="26"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+
+                <DatePicker Name="LastDate" Grid.Row="1" Grid.Column="1"
+                        CalendarStyle="{StaticResource styleCalendar}"
+                        Margin="0,0,0,0"
+                        FontSize="26"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="White"
+                        SelectedDate="{Binding LastDate}"/>
+            </Grid>
+
+            <Border BorderBrush="#00838F" BorderThickness="5,5,0,5" Grid.Row="0" Grid.Column="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Button Grid.Row="1" Grid.Column="2"
+                    Margin="20"
+                    FontSize="24"
+                    Background="#37474F"
+                    Foreground="White"
+                    Content="Buscar"/>
+
+                    <Button Grid.Row="0" Grid.Column="1"
+                    Margin="20"
+                    FontSize="24"
+                    Background="#FF5252"
+                    Foreground="White"
+                    Content="Actualizar"/>
+                </Grid>
+            </Border>
+
+        </Grid>
+
+        <DataGrid Grid.Row="1" Grid.ColumnSpan="2"
+                  Background="#263238"
+                  Margin="10"
+                  RowHeight="36"                      
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  CanUserResizeColumns="False"
+                  CanUserResizeRows="False"
+                  CanUserReorderColumns="False"
+                  CanUserSortColumns="False"
+                  IsReadOnly="True"
+                  Foreground="White"/>
+
     </Grid>
+    
+    
 </ContentControl>

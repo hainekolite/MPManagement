@@ -1,6 +1,5 @@
 ﻿using MPManagement.Contracts;
 using MPManagement.ViewModels.Commands;
-using MPManagement.ViewModels.Enums;
 using MPManagement.Views.dialogs;
 using SPManagement.Business;
 using SPManagement.Models;
@@ -441,6 +440,8 @@ namespace MPManagement.ViewModels
 
             CheckReturnedCartridges();
             UpdateList();
+            tiempo = tiempoBusiness.GetAll().FirstOrDefault();
+            dispatcherTimer.Interval = new TimeSpan(0, 0, tiempo.SegundosRefresco);
 
             EmployeeBox.Focus();
         }
@@ -609,6 +610,8 @@ namespace MPManagement.ViewModels
         {
             CheckReturnedCartridges();
             UpdateList();
+            tiempo = tiempoBusiness.GetAll().FirstOrDefault();
+            dispatcherTimer.Interval = new TimeSpan(0, 0, tiempo.SegundosRefresco);
         }
 
         private void CheckReturnedCartridges()

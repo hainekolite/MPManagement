@@ -176,7 +176,7 @@
                 Height="50"  
                 VerticalAlignment="Top"
                 BorderBrush="Transparent"
-                Background="#E91E63"
+                Background="#FF5252"
                 FontSize="26"
                 Foreground="White"
                 Content="Config"
