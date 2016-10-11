@@ -8,6 +8,19 @@ namespace SPManagement.Data.Migrations
         public override void Up()
         {
             CreateTable(
+                "dbo.BitacoraDeMovimientos",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        UserId = c.String(),
+                        RefrigeradorId = c.Int(),
+                        NumeroDeCartucho = c.String(nullable: false),
+                        FechaMovimiento = c.DateTime(nullable: false),
+                        TipoMovimiento = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
                 "dbo.Cartuchos",
                 c => new
                     {
@@ -57,6 +70,7 @@ namespace SPManagement.Data.Migrations
             DropTable("dbo.Tiempos");
             DropTable("dbo.Refrigeradores");
             DropTable("dbo.Cartuchos");
+            DropTable("dbo.BitacoraDeMovimientos");
         }
     }
 }

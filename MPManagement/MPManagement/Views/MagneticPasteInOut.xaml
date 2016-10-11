@@ -209,7 +209,7 @@
                 <Grid Grid.Row="2" Grid.ColumnSpan="2">
                     
                 </Grid>
-                
+
                 <Button Margin="5" Grid.Row="2" Grid.Column="0"
                 Height="50"  
                 VerticalAlignment="Top"
@@ -218,8 +218,8 @@
                 FontSize="26"
                 Foreground="White"
                 Content="Actualizar"
-                Command="{Binding ClearBoxesCommand}">
-
+                Command="{Binding UpdateButtonCommand}">
+                    
                     <Button.CommandParameter>
                         <MultiBinding Converter="{StaticResource MultiValueConverter}">
                             <Binding ElementName="EmployeeNameBox"/>

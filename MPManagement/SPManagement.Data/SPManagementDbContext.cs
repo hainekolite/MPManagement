@@ -14,6 +14,7 @@ namespace SPManagement.Data
         public IDbSet<Refrigerador> Refrigeradores { get; set; }
         public IDbSet<Cartucho> Cartuchos { get; set; }
         public IDbSet<Tiempo> Tiempos { get; set; }
+        public IDbSet<BitacoraDeMovimientos> BitacorasDeMovimientos { get; set; }
 
         public SPManagementDbContext() : base("SPManagementDbContext")
         {
@@ -27,6 +28,7 @@ namespace SPManagement.Data
             modelBuilder.Configurations.Add(new RefrigeradorMap());
             modelBuilder.Configurations.Add(new CartuchoMap());
             modelBuilder.Configurations.Add(new TiempoMap());
+            modelBuilder.Configurations.Add(new BitacoraDeMovimientosMap());
         }
 
 

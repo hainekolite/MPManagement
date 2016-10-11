@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitacoraDeMovimientosMap.cs" />
     <Compile Include="CartuchoMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RefrigeradorMap.cs" />

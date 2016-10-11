@@ -47,6 +47,9 @@ namespace MPManagement.ViewModels
         private readonly ParameterCommand _clearBoxesCommand;
         public ParameterCommand ClearBoxesCommand => _clearBoxesCommand;
 
+        private readonly ParameterCommand _updateButtonCommand;
+        public ParameterCommand UpdateButtonCommand => _updateButtonCommand;
+
         private readonly ParameterCommand _employeeNameEnterCommand;
         public ParameterCommand EmployeeNameEnterCommand => _employeeNameEnterCommand;
 
@@ -184,6 +187,7 @@ namespace MPManagement.ViewModels
             _solderingPasteOutCommand = new ParameterCommand(SolderPasteOut);
             _solderingPasteOptionCommand = new ParameterCommand(SolderPasteManagementConfiguration);
             _clearBoxesCommand = new ParameterCommand(ClearAllBoxes);
+            _updateButtonCommand = new ParameterCommand(UpdateButton);
 
             _employeeNameEnterCommand = new ParameterCommand(EmployeeBoxEnterKey);
             _refrigeratorIdBoxEnterCommand = new ParameterCommand(RefrigeratorIdBoxEnterKey);
@@ -412,6 +416,28 @@ namespace MPManagement.ViewModels
             var configuration = new Configuration();
             configuration.DataContext = new ConfigurationVM(configuration.Close);
             configuration.ShowDialog();
+        }
+
+        private void UpdateButton(object boxes)
+        {
+            var values = boxes as object[];
+            TextBox EmployeeBox = values[0] as TextBox;
+
+            EmployeeName = string.Empty;
+            RefrigeratorId = string.Empty;
+            CartridgeId = string.Empty;
+
+            EmployeeNameBoxEnabled = true;
+            RefrigeratorIdBoxEnabled = false;
+            CartridgeIdBoxEnabled = false;
+
+            refrigerator = null;
+            cartridge = null;
+
+            CheckReturnedCartridges();
+            UpdateList();
+
+            EmployeeBox.Focus();
         }
 
         #endregion ButtonsForMainFunctions
