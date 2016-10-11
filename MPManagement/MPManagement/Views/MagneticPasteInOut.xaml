@@ -292,7 +292,6 @@
 
                 <DataGrid.Columns>
                     <DataGridTextColumn MinWidth="64" Header="En Refrigerador" Binding="{Binding NumeroDeCartucho, Mode=OneTime}" Width="*">
-
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />

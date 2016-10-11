@@ -1,5 +1,6 @@
 ﻿using MPManagement.Contracts;
 using MPManagement.ViewModels.Commands;
+using MPManagement.ViewModels.Enums;
 using MPManagement.Views.dialogs;
 using SPManagement.Business;
 using SPManagement.Models;
@@ -31,8 +32,11 @@ namespace MPManagement.ViewModels
         private readonly RefrigeradorBusiness refrigeradorBusiness;
         private readonly CartuchoBusiness cartuchoBusiness;
         private readonly TiempoBusiness tiempoBusiness;
+        private readonly BitacoraDeMovimientosBusiness bitacoraDeMovimientosBusiness;
+
         private Refrigerador refrigerator;
         private Cartucho cartridge;
+        private BitacoraDeMovimientos binnacleOfMovement;
         public Tiempo tiempo;
 
         private readonly ParameterCommand _solderingPasteInCommand;
@@ -175,6 +179,7 @@ namespace MPManagement.ViewModels
             refrigeradorBusiness = new RefrigeradorBusiness();
             cartuchoBusiness = new CartuchoBusiness();
             tiempoBusiness = new TiempoBusiness();
+            bitacoraDeMovimientosBusiness = new BitacoraDeMovimientosBusiness();
 
             tiempo = tiempoBusiness.GetAll().FirstOrDefault();
 
@@ -240,7 +245,7 @@ namespace MPManagement.ViewModels
         private bool isEmployeeValid()
         {
             string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["SPManagementDbContext"].ConnectionString;
-            string query = "SELECT EmployeeId FROM Users u WHERE u.EmployeeId =" + "'" + Regex.Replace(EmployeeName," ",string.Empty) + "'";
+            string query = "SELECT EmployeeNumber FROM Users u WHERE u.EmployeeNumber =" + "'" + Regex.Replace(EmployeeName," ",string.Empty) + "'";
 
             SqlConnection connection = new SqlConnection(connectionString);
             SqlCommand command = new SqlCommand(query, connection);
@@ -248,8 +253,8 @@ namespace MPManagement.ViewModels
             SqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
-                string EmployeeId = (reader["EmployeeId"].ToString().ToUpper());
-                if (Regex.Replace(EmployeeName, " ", string.Empty).ToUpper().Equals(Regex.Replace(EmployeeId, " ", string.Empty)))
+                string EmployeeNumber = (reader["EmployeeNumber"].ToString().ToUpper());
+                if (Regex.Replace(EmployeeName, " ", string.Empty).ToUpper().Equals(Regex.Replace(EmployeeNumber, " ", string.Empty)))
                 {
                     connection.Close();
                     return (true);
@@ -462,8 +467,21 @@ namespace MPManagement.ViewModels
                     RefrigeradorId = refrigerator.Id
                 };
 
+                binnacleOfMovement = new BitacoraDeMovimientos()
+                {
+                    RefrigeradorId = refrigerator.Id,
+                    UserId = Regex.Replace(EmployeeName, " ", string.Empty),
+                    NumeroDeCartucho = Regex.Replace(CartridgeId, " ", string.Empty),
+                    FechaMovimiento = DateTime.Now,
+                    TipoMovimiento = 0
+                };
+
                 CartridgeList.Add(cartridge);
                 cartuchoBusiness.InsertCartucho(cartridge);
+                bitacoraDeMovimientosBusiness.InsertMovimiento(binnacleOfMovement);
+
+                binnacleOfMovement = null;
+
                 EmployeeNameBoxEnabled = true;
                 RefrigeratorIdBoxEnabled = false;
                 CartridgeIdBoxEnabled = false;
@@ -497,6 +515,17 @@ namespace MPManagement.ViewModels
                         cartridge.Estado = THIRD_STATE;
                         cartridge.NombreRefrigerador = refrigerator.NumeroDeRefrigerador;
 
+                        binnacleOfMovement = new BitacoraDeMovimientos()
+                        {
+                            RefrigeradorId = refrigerator.Id,
+                            UserId = Regex.Replace(EmployeeName, " ", string.Empty),
+                            NumeroDeCartucho = Regex.Replace(CartridgeId, " ", string.Empty),
+                            FechaMovimiento = DateTime.Now,
+                            TipoMovimiento = 3
+                        };
+
+                        bitacoraDeMovimientosBusiness.InsertMovimiento(binnacleOfMovement);
+                        binnacleOfMovement = null;
 
                         EmployeeNameBoxEnabled = true;
                         RefrigeratorIdBoxEnabled = false;
@@ -536,6 +565,18 @@ namespace MPManagement.ViewModels
                             cartridge.FechaSalida = DateTime.Now;
                             cartridge.Estado = ONE_STATE;
                             cartuchoBusiness.UpdateCartucho(query);
+
+                            binnacleOfMovement = new BitacoraDeMovimientos()
+                            {
+                                RefrigeradorId = refrigerator.Id,
+                                UserId = Regex.Replace(EmployeeName, " ", string.Empty),
+                                NumeroDeCartucho = Regex.Replace(CartridgeId, " ", string.Empty),
+                                FechaMovimiento = DateTime.Now,
+                                TipoMovimiento = 1
+                            };
+
+                            bitacoraDeMovimientosBusiness.InsertMovimiento(binnacleOfMovement);
+                            binnacleOfMovement = null;
                         }
                         else
                             MessageBox.Show("El cartucho seleccionado existe, pero no debe de ser el primero en salir. Favor de seleccionar el primer cartucho en lista, o pulsar el boton actualizar en busca de cambios");
