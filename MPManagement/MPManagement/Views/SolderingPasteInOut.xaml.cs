@@ -16,15 +16,15 @@ using System.Windows.Shapes;
 
 namespace MPManagement.Views
 {
-    public partial class MagneticPasteInOut : ContentControl
+    public partial class SolderingPasteInOut : ContentControl
     {
-        public MagneticPasteInOut()
+        public SolderingPasteInOut()
         {
             InitializeComponent();
             this.Unloaded += UnloadedContentControl;
         }
 
-        private void UnloadedContentControl(object sender, RoutedEventArgs e) => (this.DataContext as MagneticPasteInOutVM).Dispose();
+        private void UnloadedContentControl(object sender, RoutedEventArgs e) => (this.DataContext as SolderingPasteInOutVM).Dispose();
 
     }
 }

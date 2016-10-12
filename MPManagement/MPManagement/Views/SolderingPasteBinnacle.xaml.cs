@@ -15,9 +15,9 @@ using System.Windows.Shapes;
 
 namespace MPManagement.Views
 {
-    public partial class MagneticPasteBinnacle : ContentControl
+    public partial class SolderingPasteBinnacle : ContentControl
     { 
-        public MagneticPasteBinnacle()
+        public SolderingPasteBinnacle()
         {
             InitializeComponent();
         }

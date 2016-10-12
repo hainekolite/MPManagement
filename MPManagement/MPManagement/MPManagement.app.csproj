@@ -70,12 +70,13 @@
     </ApplicationDefinition>
     <Compile Include="Contracts\IDisposeDataContext.cs" />
     <Compile Include="MainWindowVM.cs" />
+    <Compile Include="ModelHelpers\Empleado.cs" />
     <Compile Include="ViewModels\Commands\ParameterCommand.cs" />
     <Compile Include="ViewModels\Commands\RelayCommand.cs" />
     <Compile Include="ViewModels\ConfigurationVM.cs" />
     <Compile Include="ViewModels\Controls\SideBarItemVM.cs" />
-    <Compile Include="ViewModels\MagneticPasteBinnacleVM.cs" />
-    <Compile Include="ViewModels\MagneticPasteInOutVM.cs" />
+    <Compile Include="ViewModels\SolderingPasteBinnacleVM.cs" />
+    <Compile Include="ViewModels\SolderingPasteInOutVM.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\Converters\DateTimeToBackGroundColorConverter.cs" />
     <Compile Include="Views\Converters\BoolFalseToBackGroundColorConverter.cs" />
@@ -89,11 +90,11 @@
     <Compile Include="Views\dialogs\Configuration.xaml.cs">
       <DependentUpon>Configuration.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MagneticPasteBinnacle.xaml.cs">
-      <DependentUpon>MagneticPasteBinnacle.xaml</DependentUpon>
+    <Compile Include="Views\SolderingPasteBinnacle.xaml.cs">
+      <DependentUpon>SolderingPasteBinnacle.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MagneticPasteInOut.xaml.cs">
-      <DependentUpon>MagneticPasteInOut.xaml</DependentUpon>
+    <Compile Include="Views\SolderingPasteInOut.xaml.cs">
+      <DependentUpon>SolderingPasteInOut.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -111,11 +112,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MagneticPasteBinnacle.xaml">
+    <Page Include="Views\SolderingPasteBinnacle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MagneticPasteInOut.xaml">
+    <Page Include="Views\SolderingPasteInOut.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

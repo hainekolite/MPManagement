@@ -18,7 +18,7 @@ using System.Windows.Threading;
 
 namespace MPManagement.ViewModels
 {
-    public class MagneticPasteInOutVM : ViewModelBase, IDisposeDataContext
+    public class SolderingPasteInOutVM : ViewModelBase, IDisposeDataContext
     {
         #region Properties
 
@@ -171,7 +171,7 @@ namespace MPManagement.ViewModels
 
         #region Constructor
 
-        public MagneticPasteInOutVM()
+        public SolderingPasteInOutVM()
         {
             Option = true;
 

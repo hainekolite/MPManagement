@@ -19,7 +19,7 @@ namespace SPManagement.Business
 
         public ICollection<BitacoraDeMovimientos> GetAll() => (unitOfWork.BitacoraDeMovimientosRepository.GetList());
 
-        public IQueryable<BitacoraDeMovimientos> GetAllTiemposByIQueryable() => unitOfWork.BitacoraDeMovimientosRepository.GetQuery();
+        public IQueryable<BitacoraDeMovimientos> GetAllBitacorasByIQueryable() => unitOfWork.BitacoraDeMovimientosRepository.GetQuery();
 
         public void InsertMovimiento(BitacoraDeMovimientos Bitacora)
         {

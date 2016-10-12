@@ -19,6 +19,8 @@ namespace SPManagement.Business
 
         public ICollection<Refrigerador> GetAll() => (unitOfWork.RefrigeradorRepository.GetList());
 
+        public IQueryable<Refrigerador> GetAllByIQueryable() => (unitOfWork.RefrigeradorRepository.GetQuery());
+
         public IQueryable<Refrigerador> GetAllRefrigeratorsByIQueryable() => 
             (unitOfWork.RefrigeradorRepository.GetQuery(null, null, includeProperties: GetIncludeProperties()));
 

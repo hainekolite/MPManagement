@@ -44,8 +44,8 @@ namespace MPManagement
         {
             SideBarItems = new ObservableCollection<SideBarItemVM>();
 
-            SideBarItems.Add(new SideBarItemVM("Manejo de pasta de soldar", new RelayCommand(() => UpdateUI(new MagneticPasteInOut() { DataContext = new MagneticPasteInOutVM() }))));
-            SideBarItems.Add(new SideBarItemVM("Bitacora", new RelayCommand(() => UpdateUI(new MagneticPasteBinnacle() { DataContext = new MagneticPasteBinnacleVM() }))));
+            SideBarItems.Add(new SideBarItemVM("Manejo de pasta de soldar", new RelayCommand(() => UpdateUI(new SolderingPasteInOut() { DataContext = new SolderingPasteInOutVM() }))));
+            SideBarItems.Add(new SideBarItemVM("Bitacora", new RelayCommand(() => UpdateUI(new SolderingPasteBinnacle() { DataContext = new SolderingPasteBinnacleVM() }))));
 
             SideBarItems[0].Command.Execute();
         }
