@@ -43,6 +43,11 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
@@ -78,8 +83,10 @@
     <Compile Include="ViewModels\SolderingPasteBinnacleVM.cs" />
     <Compile Include="ViewModels\SolderingPasteInOutVM.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\Converters\DateMultiValueConverter.cs" />
     <Compile Include="Views\Converters\DateTimeToBackGroundColorConverter.cs" />
     <Compile Include="Views\Converters\BoolFalseToBackGroundColorConverter.cs" />
+    <Compile Include="Views\Converters\intToStateDescriptionintToStateDescriptionConverter.cs" />
     <Compile Include="Views\Converters\IntZeroStateToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\IntSecondStateToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\IntFirstStateToVisibilityConverter.cs" />
@@ -163,7 +170,6 @@
       <Name>SPManagement.Models</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
