@@ -150,7 +150,16 @@
                         FontSize="24"
                         Background="#FF5252"
                         Foreground="White"
-                        Content="Restaurar"/>
+                        Content="Restaurar">
+
+                        <Button.CommandParameter>
+                            <MultiBinding Converter="{StaticResource DateMultiValueConverter}">
+                                <Binding ElementName="FirstDate"/>
+                                <Binding ElementName="LastDate"/>
+                            </MultiBinding>
+                        </Button.CommandParameter>
+
+                    </Button>
                 </Grid>
             </Border>
 

@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.Win32;
 using MPManagement.ModelHelpers;
 using MPManagement.ViewModels.Commands;
 using SPManagement.Business;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -27,8 +29,8 @@ namespace MPManagement.ViewModels
         private readonly ParameterCommand _filterByDateCommand;
         public ParameterCommand FilterByDateCommand => _filterByDateCommand;
 
-        private readonly RelayCommand _showAllCommand;
-        public RelayCommand ShowAllCommand => _showAllCommand;
+        private readonly ParameterCommand _showAllCommand;
+        public ParameterCommand ShowAllCommand => _showAllCommand;
 
         private readonly RelayCommand _exportToExcelCommand;
         public RelayCommand ExportToExcelCommand => _exportToExcelCommand;
@@ -88,7 +90,7 @@ namespace MPManagement.ViewModels
             bitacora = new ObservableCollection<BitacoraDeMovimientos>(bitacoraDeMovimientosBusiness.GetAllBitacorasByIQueryableOrderByDescending().ToList());
             GetTrueValuesForBinnacle();
             _filterByDateCommand = new ParameterCommand(FilterRevisionsByDate);
-            _showAllCommand = new RelayCommand(ShowAllBinnacles);
+            _showAllCommand = new ParameterCommand(ShowAllBinnacles);
             _exportToExcelCommand = new RelayCommand(ExportToExcel);
             updateLock = new object();
 
@@ -123,15 +125,21 @@ namespace MPManagement.ViewModels
         #endregion DateFilter
 
         #region ShowAll
-        private void ShowAllBinnacles()
+        private void ShowAllBinnacles(object datePickers)
         {
+            var values = datePickers as object[];
+            DatePicker firstDate = values[0] as DatePicker;
+            DatePicker lastDate = values[1] as DatePicker;
+            firstDate.SelectedDate = DateTime.Now;
+            lastDate.SelectedDate = DateTime.Now;
+
             if (updateTask == null || updateTask.IsCompleted)
             {
                 updateTask = Task.Run(() =>
                 {
                     lock (updateLock)
                     {
-                        bitacora = new ObservableCollection<BitacoraDeMovimientos>(bitacoraDeMovimientosBusiness.GetAllBitacorasByIQueryableOrderByDescending().ToList());
+                        bitacora = new ObservableCollection<BitacoraDeMovimientos>(bitacoraDeMovimientosBusiness.GetAllBitacorasByIQueryableOrderByDescending().ToList().Take(30));
                         GetTrueValuesForBinnacle();
                         OnPropertyChanged("bitacora");
                     }
@@ -200,34 +208,47 @@ namespace MPManagement.ViewModels
 
         private void ExportToExcel()
         {
-            string path = "C:\\Users\\Jaime\\Desktop\\hola.xlsx";
-            using (SpreadsheetDocument spreadsheet = SpreadsheetDocument.Create(path, SpreadsheetDocumentType.Workbook))
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "MS-Excel-File | *.xlsx";
+            saveFileDialog.ShowDialog();
+
+            if (!(string.IsNullOrEmpty(saveFileDialog.SafeFileName)))
             {
-                WorkbookPart workbookPart = spreadsheet.AddWorkbookPart();
-                workbookPart.Workbook = new Workbook();
-                Workbook wb = new Workbook();
-                FileVersion fv = new FileVersion();
-                fv.ApplicationName = "Microsoft Office Excel";
+                try
+                {
+                    using (SpreadsheetDocument spreadsheet = SpreadsheetDocument.Create(saveFileDialog.FileName, SpreadsheetDocumentType.Workbook))
+                    {
+                        WorkbookPart workbookPart = spreadsheet.AddWorkbookPart();
+                        workbookPart.Workbook = new Workbook();
+                        Workbook wb = new Workbook();
+                        FileVersion fv = new FileVersion();
+                        fv.ApplicationName = "Microsoft Office Excel";
 
-                Worksheet workSheet = new Worksheet();
-                WorksheetPart worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
+                        Worksheet workSheet = new Worksheet();
+                        WorksheetPart worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
 
-                SheetData sheetData = CreateSheetData();
-                workSheet.Append(sheetData);
-                worksheetPart.Worksheet = workSheet;
-                worksheetPart.Worksheet.Save();
+                        SheetData sheetData = CreateSheetData();
+                        workSheet.Append(sheetData);
+                        worksheetPart.Worksheet = workSheet;
+                        worksheetPart.Worksheet.Save();
 
-                Sheets sheets = new Sheets();
-                Sheet sheet = new Sheet();
-                sheet.Id = spreadsheet.WorkbookPart.GetIdOfPart(worksheetPart);
-                sheet.SheetId = 1; //sheet Id, anything but unique
-                sheet.Name = "Reporte"; //sheet name
-                sheets.Append(sheet);
+                        Sheets sheets = new Sheets();
+                        Sheet sheet = new Sheet();
+                        sheet.Id = spreadsheet.WorkbookPart.GetIdOfPart(worksheetPart);
+                        sheet.SheetId = 1; //sheet Id, anything but unique
+                        sheet.Name = "Reporte"; //sheet name
+                        sheets.Append(sheet);
 
-                wb.Append(sheets);
-                spreadsheet.WorkbookPart.Workbook = wb;
-                spreadsheet.WorkbookPart.Workbook.Save();
-                spreadsheet.Clone();
+                        wb.Append(sheets);
+                        spreadsheet.WorkbookPart.Workbook = wb;
+                        spreadsheet.WorkbookPart.Workbook.Save();
+                        spreadsheet.Close();
+                    }
+                }
+                catch(Exception e)
+                {
+                    MessageBox.Show(e.StackTrace);
+                }   
             }
         }
 
