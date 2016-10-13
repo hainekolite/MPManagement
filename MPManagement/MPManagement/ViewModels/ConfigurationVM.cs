@@ -165,7 +165,7 @@ namespace MPManagement.ViewModels
 
                 if (!(hoursBeforeDek.Equals(0) || hoursReadyForDek.Equals(0) || hoursAfterReturn.Equals(0) || secondsForRefresh.Equals(0)))
                 {
-                    if (hoursBeforeDek < hoursReadyForDek)
+                    if (hoursBeforeDek < hoursReadyForDek && secondsForRefresh >= 10 )
                     {
                         if (tiempo != null)
                         {
@@ -192,7 +192,7 @@ namespace MPManagement.ViewModels
                         }
                     }
                     else
-                        MessageBox.Show("No es posible adjudicar al tiempo mayor de ambientacion un valor menor al tiempo minimo en ambientacion", "ERROR");
+                        MessageBox.Show("No es posible adjudicar al tiempo mayor de ambientacion un valor menor al tiempo minimo en ambientacion. NOTA: el tiempo de refresco minimo es 10seg", "ERROR");
                 }
                 else
                     MessageBox.Show("No puede adjudicar un tiempo cero, favor de rectificar la informacion", "ERROR");

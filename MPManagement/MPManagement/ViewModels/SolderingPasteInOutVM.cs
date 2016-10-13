@@ -480,18 +480,6 @@ namespace MPManagement.ViewModels
                 CartridgeList.Add(cartridge);
                 cartuchoBusiness.InsertCartucho(cartridge);
                 bitacoraDeMovimientosBusiness.InsertMovimiento(binnacleOfMovement);
-
-                binnacleOfMovement = null;
-
-                EmployeeNameBoxEnabled = true;
-                RefrigeratorIdBoxEnabled = false;
-                CartridgeIdBoxEnabled = false;
-
-                EmployeeName = string.Empty;
-                RefrigeratorId = string.Empty;
-                CartridgeId = string.Empty;
-
-                box.Focus();
                 MessageBox.Show("Cartucho introducido exitosamente");
             }
             else
@@ -527,16 +515,6 @@ namespace MPManagement.ViewModels
 
                         bitacoraDeMovimientosBusiness.InsertMovimiento(binnacleOfMovement);
                         binnacleOfMovement = null;
-
-                        EmployeeNameBoxEnabled = true;
-                        RefrigeratorIdBoxEnabled = false;
-                        CartridgeIdBoxEnabled = false;
-
-                        EmployeeName = string.Empty;
-                        RefrigeratorId = string.Empty;
-                        CartridgeId = string.Empty;
-
-                        box.Focus();
                     }
                     else
                         MessageBox.Show("El cartucho seleccionado existe pero la aplicacion no se encuentra actualizada, favor de actualizar la aplicacion antes de realizar el movimiento");
@@ -544,7 +522,18 @@ namespace MPManagement.ViewModels
                 else
                     MessageBox.Show("No es posible insertar de nuevo ese cartucho, favor de actualizar su aplicacion en caso de no verlo", "ERROR");
             }
-                
+
+
+            EmployeeNameBoxEnabled = true;
+            RefrigeratorIdBoxEnabled = false;
+            CartridgeIdBoxEnabled = false;
+
+            EmployeeName = string.Empty;
+            RefrigeratorId = string.Empty;
+            CartridgeId = string.Empty;
+
+            box.Focus();
+
         }
 
 
@@ -609,9 +598,9 @@ namespace MPManagement.ViewModels
         private void DispatcherTimerTick(object sender, EventArgs e)
         {
             CheckReturnedCartridges();
-            UpdateList();
             tiempo = tiempoBusiness.GetAll().FirstOrDefault();
             dispatcherTimer.Interval = new TimeSpan(0, 0, tiempo.SegundosRefresco);
+            UpdateList();
         }
 
         private void CheckReturnedCartridges()

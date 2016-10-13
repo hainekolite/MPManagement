@@ -59,6 +59,7 @@
                 </Grid.ColumnDefinitions>
                 
                 <Button Grid.Row="1" Grid.Column="0"
+                    BorderBrush="Transparent"
                     Margin="10"
                     FontSize="16"
                     Background="#FF5252"
@@ -125,6 +126,7 @@
                     </Grid.RowDefinitions>
 
                     <Button Grid.Row="1" Grid.Column="2"
+                        BorderBrush="Transparent"
                         Margin="20"
                         FontSize="24"
                         Background="#37474F"
@@ -143,6 +145,7 @@
 
                     <Button Grid.Row="0" Grid.Column="1"
                         Command="{Binding ShowAllCommand}"
+                        BorderBrush="Transparent"
                         Margin="20"
                         FontSize="24"
                         Background="#FF5252"
@@ -157,7 +160,7 @@
                   ItemsSource="{Binding bitacora, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                   Background="#263238"
                   Margin="10"
-                  RowHeight="36"                      
+                  RowHeight="40"                      
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"
@@ -172,7 +175,8 @@
                 <Style TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="HorizontalContentAlignment" Value="center"/>
                     <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Height" Value="36"/>
+                    <Setter Property="Height" Value="50"/>
+                    <Setter Property="FontSize" Value="22" />
                 </Style>
             </DataGrid.ColumnHeaderStyle>
 
@@ -187,6 +191,7 @@
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
                             <Setter Property="Background" Value="#263238"/>
+                            <Setter Property="FontSize" Value="14"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
@@ -201,6 +206,7 @@
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
                             <Setter Property="Background" Value="#263238"/>
+                            <Setter Property="FontSize" Value="14"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
@@ -215,6 +221,7 @@
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
                             <Setter Property="Background" Value="#263238"/>
+                            <Setter Property="FontSize" Value="14"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
@@ -231,6 +238,7 @@
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
                             <Setter Property="Background" Value="#263238"/>
+                            <Setter Property="FontSize" Value="14"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>
@@ -246,6 +254,7 @@
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell">
                             <Setter Property="Background" Value="#263238"/>
+                            <Setter Property="FontSize" Value="14"/>
                         </Style>
                     </DataGridTextColumn.CellStyle>
                 </DataGridTextColumn>

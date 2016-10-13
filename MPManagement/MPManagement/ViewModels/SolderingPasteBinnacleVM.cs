@@ -1,4 +1,7 @@
-﻿using MPManagement.ModelHelpers;
+﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
+using MPManagement.ModelHelpers;
 using MPManagement.ViewModels.Commands;
 using SPManagement.Business;
 using SPManagement.Models;
@@ -13,6 +16,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace MPManagement.ViewModels
 {
@@ -35,6 +39,9 @@ namespace MPManagement.ViewModels
         private readonly RefrigeradorBusiness refrigeradorBusiness;
         private ICollection<Refrigerador> refrigeradores;
         private ICollection<Empleado> empleados;
+        private Task updateTask;
+        private Object updateLock;
+
 
         private DateTime _initialDate;
         public DateTime InitialDate
@@ -83,18 +90,19 @@ namespace MPManagement.ViewModels
             _filterByDateCommand = new ParameterCommand(FilterRevisionsByDate);
             _showAllCommand = new RelayCommand(ShowAllBinnacles);
             _exportToExcelCommand = new RelayCommand(ExportToExcel);
+            updateLock = new object();
 
         }
         #endregion Constructor
 
-        #region DateFiler
+        #region DateFilter
 
         private void FilterRevisionsByDate(object datePickers)
         {
+
             var values = datePickers as object[];
             DatePicker firstDate = values[0] as DatePicker;
             DatePicker lastDate = values[1] as DatePicker;
-
             if (firstDate.SelectedDate >= lastDate.SelectedDate)
                 MessageBox.Show("La fecha inicial no puede ser mayor a la fecha final, de igual forma no pueden ser iguales", "ERROR");
             else
@@ -112,14 +120,26 @@ namespace MPManagement.ViewModels
             }
         }
 
-        #endregion DateFiler
+        #endregion DateFilter
 
         #region ShowAll
         private void ShowAllBinnacles()
         {
-            bitacora = new ObservableCollection<BitacoraDeMovimientos>(bitacoraDeMovimientosBusiness.GetAllBitacorasByIQueryableOrderByDescending().ToList());
-            GetTrueValuesForBinnacle();
-            OnPropertyChanged("bitacora");
+            if (updateTask == null || updateTask.IsCompleted)
+            {
+                updateTask = Task.Run(() =>
+                {
+                    lock (updateLock)
+                    {
+                        bitacora = new ObservableCollection<BitacoraDeMovimientos>(bitacoraDeMovimientosBusiness.GetAllBitacorasByIQueryableOrderByDescending().ToList());
+                        GetTrueValuesForBinnacle();
+                        OnPropertyChanged("bitacora");
+                    }
+                });
+            }
+            else
+                MessageBox.Show("Favor de esperar a que se termine la carga de datos");
+
         }
         #endregion ShowAll
 
@@ -180,79 +200,171 @@ namespace MPManagement.ViewModels
 
         private void ExportToExcel()
         {
-            Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
-            // Create empty workbook
-            excel.Workbooks.Add();
-
-            // Create Worksheet from active sheet
-            Microsoft.Office.Interop.Excel._Worksheet workSheet = excel.ActiveSheet;
-
-            try
+            string path = "C:\\Users\\Jaime\\Desktop\\hola.xlsx";
+            using (SpreadsheetDocument spreadsheet = SpreadsheetDocument.Create(path, SpreadsheetDocumentType.Workbook))
             {
-                // ------------------------------------------------
-                // Creation of header cells
-                // ------------------------------------------------
+                WorkbookPart workbookPart = spreadsheet.AddWorkbookPart();
+                workbookPart.Workbook = new Workbook();
+                Workbook wb = new Workbook();
+                FileVersion fv = new FileVersion();
+                fv.ApplicationName = "Microsoft Office Excel";
 
-                workSheet.Cells[1, "A"] = "Reporte de movimientos 'Pasta de Soldar'";
-                workSheet.Cells[1, "B"] = string.Format("A: {0}",DateTime.Now.ToString());
+                Worksheet workSheet = new Worksheet();
+                WorksheetPart worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
 
-                workSheet.Cells[3, "A"] = "Empleado";
-                workSheet.Cells[3, "B"] = "Refrigerador";
-                workSheet.Cells[3, "C"] = "Cartucho";
-                workSheet.Cells[3, "D"] = "Movimiento";
-                workSheet.Cells[3, "E"] = "Fecha de Movimiento";
-                // ------------------------------------------------
-                // Populate sheet with some real data from "cars" list
-                // ------------------------------------------------
+                SheetData sheetData = CreateSheetData();
+                workSheet.Append(sheetData);
+                worksheetPart.Worksheet = workSheet;
+                worksheetPart.Worksheet.Save();
 
-                int row = 4; // start row (in row 1 are header cells)
-                for (int i=0; i< bitacora.Count; i++)
-                {
-                    workSheet.Cells[row, "A"] = bitacora.ElementAt(i).NombreDeEmpleado;
-                    workSheet.Cells[row, "B"] = bitacora.ElementAt(i).NombreRefrigerador;
-                    workSheet.Cells[row, "C"] = bitacora.ElementAt(i).NumeroDeCartucho;
-                    workSheet.Cells[row, "D"] = bitacora.ElementAt(i).NombreRefrigerador;
-                    workSheet.Cells[row, "E"] = bitacora.ElementAt(i).FechaMovimiento.ToString();
-                    row++;
-                }
-                // Apply some predefined styles for data to look nicely :)
-                //workSheet.Range["A1"].AutoFormat(Microsoft.Office.Interop.Excel.XlRangeAutoFormat.xlRangeAutoFormatClassic1);
+                Sheets sheets = new Sheets();
+                Sheet sheet = new Sheet();
+                sheet.Id = spreadsheet.WorkbookPart.GetIdOfPart(worksheetPart);
+                sheet.SheetId = 1; //sheet Id, anything but unique
+                sheet.Name = "Reporte"; //sheet name
+                sheets.Append(sheet);
 
-                // Define filename
-                //string fileName = string.Format(@"{0}\ExcelData.xlsx", Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory));
-
-                // Save this data as a file
-                //workSheet.SaveAs(fileName);
-
-                excel.Visible = true;
-
-                // Display SUCCESS message
-                //MessageBox.Show(string.Format("The file '{0}' is saved successfully!", fileName));
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show("Exception");
-            }
-            finally
-            {
-                // Quit Excel application
-                /*excel.Quit();
-
-                // Release COM objects (very important!)
-                if (excel != null)
-                    System.Runtime.InteropServices.Marshal.ReleaseComObject(excel);
-
-                if (workSheet != null)
-                    System.Runtime.InteropServices.Marshal.ReleaseComObject(workSheet);
-
-                // Empty variables
-                excel = null;
-                workSheet = null;*/
-
-                // Force garbage collector cleaning
-                GC.Collect();
+                wb.Append(sheets);
+                spreadsheet.WorkbookPart.Workbook = wb;
+                spreadsheet.WorkbookPart.Workbook.Save();
+                spreadsheet.Clone();
             }
         }
+
+
+        private SheetData CreateSheetData()
+        {
+            SheetData sheetData = new SheetData();
+            //Generate Data 
+            Row header = new Row();
+            Row topHeader = new Row();
+            int topHeaderIndex = 3;
+            int rowIndexForHeader = 1;
+            header.RowIndex = (uint)rowIndexForHeader;
+            topHeader.RowIndex = (uint)topHeaderIndex;
+            /*Header */
+            Cell HeaderCellOne = new Cell()
+            {
+                CellReference = string.Format("A1"),
+                DataType = CellValues.InlineString,
+                InlineString = new InlineString() { Text = new Text("Reporte de administracion -  Pasta de soldar") },
+            };
+            Cell HeaderCellTwo = new Cell()
+            {
+                CellReference = string.Format("B1"),
+                DataType = CellValues.InlineString,
+                InlineString = new InlineString() { Text = new Text(string.Format("A: {0}",DateTime.Now.ToString()))},
+            };
+
+            /*Top Header*/
+            Cell TopHeaderCellOne = new Cell()
+            {
+                CellReference = string.Format("A3"),
+                DataType = CellValues.InlineString,
+                InlineString = new InlineString() { Text = new Text("Empleado") },
+            };
+            Cell TopHeaderCellTwo = new Cell()
+            {
+                CellReference = string.Format("B3"),
+                DataType = CellValues.InlineString,
+                InlineString = new InlineString() { Text = new Text("Refrigerador") },
+            };
+            Cell TopHeaderCellThree = new Cell()
+            {
+                CellReference = string.Format("C3"),
+                DataType = CellValues.InlineString,
+                InlineString = new InlineString() { Text = new Text("Numero de cartucho") },
+            };
+            Cell TopHeaderCellFour = new Cell()
+            {
+                CellReference = string.Format("D3"),
+                DataType = CellValues.InlineString,
+                InlineString = new InlineString() { Text = new Text("Movimiento") },
+            };
+            Cell TopHeaderCellFive = new Cell()
+            {
+                CellReference = string.Format("E3"),
+                DataType = CellValues.InlineString,
+                InlineString = new InlineString() { Text = new Text("Fecha de movimiento") },
+            };
+
+
+            header.Append(HeaderCellOne);
+            header.Append(HeaderCellTwo);
+            topHeader.Append(TopHeaderCellOne);
+            topHeader.Append(TopHeaderCellTwo);
+            topHeader.Append(TopHeaderCellThree);
+            topHeader.Append(TopHeaderCellFour);
+            topHeader.Append(TopHeaderCellFive);
+            sheetData.Append(header);
+            sheetData.Append(topHeader);
+
+            string movimiento = string.Empty;
+            for (int i = 0; i < bitacora.Count; i++)
+            {
+                Row row = new Row();
+                int rowIndex = i+4;
+                row.RowIndex = (uint)rowIndex;  
+
+                if (bitacora.ElementAt(i).TipoMovimiento == 0)
+                    movimiento = "Entrada a refrigerador";
+                else if (bitacora.ElementAt(i).TipoMovimiento == 1)
+                    movimiento = "Salida a ambientacion";
+                else if (bitacora.ElementAt(i).TipoMovimiento == 2)
+                    movimiento = "insertada a maquina DEK";
+                else if (bitacora.ElementAt(i).TipoMovimiento == 3)
+                    movimiento = "Retorno a refrigerador";
+                else if (bitacora.ElementAt(i).TipoMovimiento == 4)
+                    movimiento = "Cartucho terminado";
+                else
+                    movimiento = "Movimiento no catalogado";
+
+                Cell Acell = new Cell()
+                {
+                    CellReference = string.Format("A{0}", row.RowIndex.ToString()),
+                    DataType = CellValues.InlineString,
+                    InlineString = new InlineString() { Text = new Text(bitacora.ElementAt(i).NombreDeEmpleado) },
+                };
+
+                Cell Bcell = new Cell()
+                {
+                    CellReference = string.Format("B{0}", row.RowIndex.ToString()),
+                    DataType = CellValues.InlineString,
+                    InlineString = new InlineString() { Text = new Text(bitacora.ElementAt(i).NombreRefrigerador) },
+                };
+
+                Cell Ccell = new Cell()
+                {
+                    CellReference = string.Format("C{0}", row.RowIndex.ToString()),
+                    DataType = CellValues.InlineString,
+                    InlineString = new InlineString() { Text = new Text(bitacora.ElementAt(i).NumeroDeCartucho) },
+                };
+
+                Cell Dcell = new Cell()
+                {
+                    CellReference = string.Format("D{0}", row.RowIndex.ToString()),
+                    DataType = CellValues.InlineString,
+                    InlineString = new InlineString() { Text = new Text(movimiento) },
+                };
+                Cell Ecell = new Cell()
+                {
+                    CellReference = string.Format("E{0}", row.RowIndex.ToString()),
+                    DataType = CellValues.InlineString,
+                    InlineString = new InlineString() { Text = new Text(bitacora.ElementAt(i).FechaMovimiento.ToString()) },
+                };
+
+                row.Append(Acell);
+                row.Append(Bcell);
+                row.Append(Ccell);
+                row.Append(Dcell);
+                row.Append(Ecell);
+
+                sheetData.Append(row);
+            }
+            return (sheetData);
+        }
+
+
 
         #endregion ExcelRelated
     }
