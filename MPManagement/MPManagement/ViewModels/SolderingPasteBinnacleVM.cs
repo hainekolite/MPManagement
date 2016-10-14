@@ -87,7 +87,7 @@ namespace MPManagement.ViewModels
             bitacoraDeMovimientosBusiness = new BitacoraDeMovimientosBusiness();
             refrigeradores = refrigeradorBusiness.GetAllByIQueryable().ToList();
             GetAllEmployeesBySQLRawQuery();
-            bitacora = new ObservableCollection<BitacoraDeMovimientos>(bitacoraDeMovimientosBusiness.GetAllBitacorasByIQueryableOrderByDescending().ToList());
+            bitacora = new ObservableCollection<BitacoraDeMovimientos>(bitacoraDeMovimientosBusiness.GetAllBitacorasByIQueryableOrderByDescending().ToList().Take(50));
             GetTrueValuesForBinnacle();
             _filterByDateCommand = new ParameterCommand(FilterRevisionsByDate);
             _showAllCommand = new ParameterCommand(ShowAllBinnacles);
