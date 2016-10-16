@@ -37,6 +37,7 @@ namespace MPManagement.ViewModels
         private Cartucho cartridge;
         private BitacoraDeMovimientos binnacleOfMovement;
         public Tiempo tiempo;
+        private Task InOutThread;
 
         private readonly ParameterCommand _solderingPasteInCommand;
         public ParameterCommand SolderingPasteInCommand => _solderingPasteInCommand;
@@ -304,7 +305,7 @@ namespace MPManagement.ViewModels
                 refrigeratorIdBox.Focus();
             }
             else
-                MessageBox.Show("Nombre de Empleado no Valido favor de consultar con su supervisor", "ERROR");
+                MessageBox.Show("Nombre de Empleado no valido, favor de consultar con su supervisor", "ERROR");
             
         }
 
@@ -327,27 +328,40 @@ namespace MPManagement.ViewModels
             }
         }
 
-        private void CartridgeIdBoxEnterKey(object box)
+        private async void CartridgeIdBoxEnterKey(object box)
         {
             TextBox employeeNameBox = box as TextBox;
-            if (isCartridgeValid())
+            CartridgeIdBoxEnabled = false;
+            await Task.Run(() =>
             {
-                if (Option)
+                if (isCartridgeValid())
                 {
-                    InsertCartridgeToRefrigerator(ref employeeNameBox);
-                    UpdateList();
+                    if (Option)
+                    {
+                        InsertCartridgeToRefrigerator();
+                        UpdateList();
+                    }
+                    else
+                    {
+                        UpdateCartridgeStateForOut();
+                        UpdateList();
+                    }
                 }
                 else
                 {
-                    UpdateCartridgeStateForOut(ref employeeNameBox);
-                    UpdateList();
+                    MessageBox.Show("Cartucho no identificado");
+                    cartridge = null;
                 }
-            }
-            else
-            {
-                MessageBox.Show("Cartucho no identificado");
-                cartridge  = null;
-            }
+            });
+
+            EmployeeNameBoxEnabled = true;
+            RefrigeratorIdBoxEnabled = false;
+            CartridgeIdBoxEnabled = false;
+
+            EmployeeName = string.Empty;
+            RefrigeratorId = string.Empty;
+            CartridgeId = string.Empty;
+            employeeNameBox.Focus();
         }
 
         private void ClearAllBoxes(object boxes)
@@ -450,7 +464,7 @@ namespace MPManagement.ViewModels
 
         #region InsertUpdateCartridgeMethods
 
-        private void InsertCartridgeToRefrigerator(ref TextBox box)
+        private void InsertCartridgeToRefrigerator()
         {
             string cartridgeName = Regex.Replace(CartridgeId, " ", string.Empty);
             var query = cartuchoBusiness.GetAllCartuchosByIQueryable().Where(c => c.NumeroDeCartucho == cartridgeName).FirstOrDefault();
@@ -522,22 +536,10 @@ namespace MPManagement.ViewModels
                 else
                     MessageBox.Show("No es posible insertar de nuevo ese cartucho, favor de actualizar su aplicacion en caso de no verlo", "ERROR");
             }
-
-
-            EmployeeNameBoxEnabled = true;
-            RefrigeratorIdBoxEnabled = false;
-            CartridgeIdBoxEnabled = false;
-
-            EmployeeName = string.Empty;
-            RefrigeratorId = string.Empty;
-            CartridgeId = string.Empty;
-
-            box.Focus();
-
         }
 
 
-        private void UpdateCartridgeStateForOut(ref TextBox box)
+        private void UpdateCartridgeStateForOut()
         {
             var query = cartuchoBusiness.GetAllCartuchosByRefrigeradorIdByIQueryable(refrigerator.Id).ToList().Where(c => c.NumeroDeCartucho == CartridgeId).FirstOrDefault();
             if (query != null)
@@ -573,16 +575,6 @@ namespace MPManagement.ViewModels
                     }
                     else
                         MessageBox.Show("El cartucho seleccionado existe pero la aplicacion no se encuentra actualizada, favor de actualizar la aplicacion antes de realizar el movimiento");
-
-                    EmployeeNameBoxEnabled = true;
-                    RefrigeratorIdBoxEnabled = false;
-                    CartridgeIdBoxEnabled = false;
-
-                    EmployeeName = string.Empty;
-                    RefrigeratorId = string.Empty;
-                    CartridgeId = string.Empty;
-
-                    box.Focus();
                 }
                 else
                     MessageBox.Show("El cartucho seleccionado no se encuentra en alguno de los refrigeradores", "ERROR");

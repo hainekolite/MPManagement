@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MPManagement"
         mc:Ignorable="d"
-        Title="Manejo de pasta magnetica"
+        Icon="mpmanagementlogo.ico"
+        Title="Administrador de pasta magnetica"
         Background="#ECEFF1"
         Height="768" MinHeight="768"
         Width="900" MinWidth="1000">
