@@ -37,7 +37,7 @@ namespace MPManagement.ViewModels
         private Cartucho cartridge;
         private BitacoraDeMovimientos binnacleOfMovement;
         public Tiempo tiempo;
-        private Task InOutThread;
+        private Object DBLock;
 
         private readonly ParameterCommand _solderingPasteInCommand;
         public ParameterCommand SolderingPasteInCommand => _solderingPasteInCommand;
@@ -205,7 +205,7 @@ namespace MPManagement.ViewModels
             EmployeeName = string.Empty;
             RefrigeratorId = string.Empty;
             CartridgeId = string.Empty;
-
+            DBLock = new object();
             UpdateList();
         }
 
@@ -334,23 +334,26 @@ namespace MPManagement.ViewModels
             CartridgeIdBoxEnabled = false;
             await Task.Run(() =>
             {
-                if (isCartridgeValid())
+                lock (DBLock)
                 {
-                    if (Option)
+                    if (isCartridgeValid())
                     {
-                        InsertCartridgeToRefrigerator();
-                        UpdateList();
+                        if (Option)
+                        {
+                            InsertCartridgeToRefrigerator();
+                            UpdateList();
+                        }
+                        else
+                        {
+                            UpdateCartridgeStateForOut();
+                            UpdateList();
+                        }
                     }
                     else
                     {
-                        UpdateCartridgeStateForOut();
-                        UpdateList();
+                        MessageBox.Show("Cartucho no identificado");
+                        cartridge = null;
                     }
-                }
-                else
-                {
-                    MessageBox.Show("Cartucho no identificado");
-                    cartridge = null;
                 }
             });
 
@@ -436,7 +439,7 @@ namespace MPManagement.ViewModels
             configuration.ShowDialog();
         }
 
-        private void UpdateButton(object boxes)
+        private async void UpdateButton(object boxes)
         {
             var values = boxes as object[];
             TextBox EmployeeBox = values[0] as TextBox;
@@ -451,9 +454,15 @@ namespace MPManagement.ViewModels
 
             refrigerator = null;
             cartridge = null;
+            await Task.Run(() =>
+            {
+                lock (DBLock)
+                {
+                    CheckReturnedCartridges();
+                    UpdateList();
+                }
+            });
 
-            CheckReturnedCartridges();
-            UpdateList();
             tiempo = tiempoBusiness.GetAll().FirstOrDefault();
             dispatcherTimer.Interval = new TimeSpan(0, 0, tiempo.SegundosRefresco);
 
@@ -589,10 +598,13 @@ namespace MPManagement.ViewModels
 
         private void DispatcherTimerTick(object sender, EventArgs e)
         {
-            CheckReturnedCartridges();
-            tiempo = tiempoBusiness.GetAll().FirstOrDefault();
-            dispatcherTimer.Interval = new TimeSpan(0, 0, tiempo.SegundosRefresco);
-            UpdateList();
+            lock (DBLock)
+            {
+                CheckReturnedCartridges();
+                tiempo = tiempoBusiness.GetAll().FirstOrDefault();
+                dispatcherTimer.Interval = new TimeSpan(0, 0, tiempo.SegundosRefresco);
+                UpdateList();
+            }
         }
 
         private void CheckReturnedCartridges()
