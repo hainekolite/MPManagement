@@ -540,10 +540,10 @@ namespace MPManagement.ViewModels
                         binnacleOfMovement = null;
                     }
                     else
-                        MessageBox.Show("El cartucho seleccionado existe pero la aplicacion no se encuentra actualizada, favor de actualizar la aplicacion antes de realizar el movimiento");
+                        MessageBox.Show("El cartucho seleccionado existe pero la aplicación no se encuentra actualizada, favor de actualizar la aplicación antes de realizar el movimiento");
                 }
                 else
-                    MessageBox.Show("No es posible insertar de nuevo ese cartucho, favor de actualizar su aplicacion en caso de no verlo", "ERROR");
+                    MessageBox.Show("No es posible insertar de nuevo ese cartucho, favor de actualizar su aplicación en caso de no verlo", "ERROR");
             }
         }
 
@@ -580,10 +580,10 @@ namespace MPManagement.ViewModels
                             binnacleOfMovement = null;
                         }
                         else
-                            MessageBox.Show("El cartucho seleccionado existe, pero no debe de ser el primero en salir. Favor de seleccionar el primer cartucho en lista, o pulsar el boton actualizar en busca de cambios");
+                            MessageBox.Show("El cartucho seleccionado existe, pero no debe de ser el primero en salir. Favor de seleccionar el primer cartucho en lista, o pulsar el botón actualizar en busca de cambios");
                     }
                     else
-                        MessageBox.Show("El cartucho seleccionado existe pero la aplicacion no se encuentra actualizada, favor de actualizar la aplicacion antes de realizar el movimiento");
+                        MessageBox.Show("El cartucho seleccionado existe pero la aplicación no se encuentra actualizada, favor de actualizar la aplicación antes de realizar el movimiento");
                 }
                 else
                     MessageBox.Show("El cartucho seleccionado no se encuentra en alguno de los refrigeradores", "ERROR");

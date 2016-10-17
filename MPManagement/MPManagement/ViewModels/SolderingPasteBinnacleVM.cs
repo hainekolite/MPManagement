@@ -87,7 +87,7 @@ namespace MPManagement.ViewModels
             bitacoraDeMovimientosBusiness = new BitacoraDeMovimientosBusiness();
             refrigeradores = refrigeradorBusiness.GetAllByIQueryable().ToList();
             GetAllEmployeesBySQLRawQuery();
-            bitacora = new ObservableCollection<BitacoraDeMovimientos>(bitacoraDeMovimientosBusiness.GetAllBitacorasByIQueryableOrderByDescending().ToList().Take(100));
+            bitacora = new ObservableCollection<BitacoraDeMovimientos>(bitacoraDeMovimientosBusiness.GetAllBitacorasByIQueryableOrderByDescending().ToList().Take(80));
             GetTrueValuesForBinnacle();
             _filterByDateCommand = new ParameterCommand(FilterRevisionsByDate);
             _showAllCommand = new ParameterCommand(ShowAllBinnacles);
@@ -113,12 +113,12 @@ namespace MPManagement.ViewModels
                 {
                     _initialDate = ((DateTime)firstDate.SelectedDate);
                     _finishDate = ((DateTime)lastDate.SelectedDate);
-                    bitacora = new ObservableCollection<BitacoraDeMovimientos>(bitacoraDeMovimientosBusiness.GetAllBitacorasInDateRange(_initialDate, _finishDate).ToList());
+                    bitacora = new ObservableCollection<BitacoraDeMovimientos>(bitacoraDeMovimientosBusiness.GetAllBitacorasInDateRange(_initialDate, _finishDate).ToList().Take(80));
                     GetTrueValuesForBinnacle();
                     OnPropertyChanged("bitacora");
                 }
                 else
-                    MessageBox.Show("No existen datos que filtrar, debe de existir almenos un elemento en la bitacora para realizar el filtrado", "AVISO");
+                    MessageBox.Show("No existen datos que filtrar, debe de existir por lo menos un elemento en la bitácora para realizar el filtrado", "AVISO");
             }
         }
 
@@ -130,8 +130,7 @@ namespace MPManagement.ViewModels
             var values = datePickers as object[];
             DatePicker firstDate = values[0] as DatePicker;
             DatePicker lastDate = values[1] as DatePicker;
-            firstDate.SelectedDate = DateTime.Now;
-            lastDate.SelectedDate = DateTime.Now;
+            lastDate.SelectedDate = firstDate.SelectedDate  = DateTime.Now;
 
             if (updateTask == null || updateTask.IsCompleted)
             {
@@ -139,7 +138,7 @@ namespace MPManagement.ViewModels
                 {
                     lock (updateLock)
                     {
-                        bitacora = new ObservableCollection<BitacoraDeMovimientos>(bitacoraDeMovimientosBusiness.GetAllBitacorasByIQueryableOrderByDescending().ToList().Take(30));
+                        bitacora = new ObservableCollection<BitacoraDeMovimientos>(bitacoraDeMovimientosBusiness.GetAllBitacorasByIQueryableOrderByDescending().ToList().Take(80));
                         GetTrueValuesForBinnacle();
                         OnPropertyChanged("bitacora");
                     }

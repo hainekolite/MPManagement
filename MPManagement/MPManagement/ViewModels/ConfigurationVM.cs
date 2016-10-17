@@ -155,7 +155,7 @@ namespace MPManagement.ViewModels
             int secondsForRefresh;
 
             if (string.IsNullOrEmpty(HoursBeforeDek) || string.IsNullOrEmpty(HoursReadyForDek) || string.IsNullOrEmpty(HoursAfterReturn) || string.IsNullOrEmpty(SecondsForRefresh))
-                MessageBox.Show("Alguno de los campos no fue llenado, favor de rectificar la informacion", "ERROR");
+                MessageBox.Show("Alguno de los campos no fue llenado, favor de rectificar la información", "ERROR");
             else
             {
                 Int32.TryParse(Regex.Replace(HoursBeforeDek, " ", string.Empty), out hoursBeforeDek);
@@ -174,7 +174,7 @@ namespace MPManagement.ViewModels
                             tiempo.HorasReposoTrasRetorno = hoursAfterReturn;
                             tiempo.SegundosRefresco = secondsForRefresh;
                             tiempoBusiness.UpdateTiempo(tiempo);
-                            MessageBox.Show("Cambios realizados con exito", "EXITO");
+                            MessageBox.Show("Cambios realizados con éxito", "EXITO");
                             CancelTimeChangesCommand.Execute();
                         }
                         else
@@ -187,15 +187,15 @@ namespace MPManagement.ViewModels
                                 SegundosRefresco = secondsForRefresh
                             };
                             tiempoBusiness.InsertTiempo(tiempo);
-                            MessageBox.Show("Cambios realizados con exito", "EXITO");
+                            MessageBox.Show("Cambios realizados con éxito", "EXITO");
                             CancelTimeChangesCommand.Execute();
                         }
                     }
                     else
-                        MessageBox.Show("No es posible adjudicar al tiempo mayor de ambientacion un valor menor al tiempo minimo en ambientacion. NOTA: el tiempo de refresco minimo es 10seg", "ERROR");
+                        MessageBox.Show("No es posible adjudicar al tiempo mayor de ambientación un valor menor al tiempo mínimo en ambientación. NOTA: el tiempo de refresco mínimo es 10seg", "ERROR");
                 }
                 else
-                    MessageBox.Show("No puede adjudicar un tiempo cero, favor de rectificar la informacion", "ERROR");
+                    MessageBox.Show("No puede adjudicar un tiempo cero, favor de rectificar la información", "ERROR");
             }
 
         }
