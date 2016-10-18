@@ -47,7 +47,7 @@
             </Grid.RowDefinitions>
         </Grid>
 
-        <Border BorderBrush="#00838F" BorderThickness="0,0,0,5" Margin="0,10,0,10" Grid.Row="0" Grid.Column="0">
+        <Border BorderBrush="#00838F" BorderThickness="0,0,0,0" Margin="0,10,0,10" Grid.Row="0" Grid.Column="0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -58,9 +58,9 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 
-                <Button Grid.Row="1" Grid.Column="0"
+                <Button Grid.Row="1" Grid.ColumnSpan="2"
                     BorderBrush="Transparent"
-                    Margin="10"
+                    Margin="0,10,0,0"
                     FontSize="16"
                     Background="#FF5252"
                     Foreground="White"

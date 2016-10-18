@@ -331,7 +331,7 @@ namespace MPManagement.ViewModels
                 else if (bitacora.ElementAt(i).TipoMovimiento == 1)
                     movimiento = "Salida a ambientacion";
                 else if (bitacora.ElementAt(i).TipoMovimiento == 2)
-                    movimiento = "insertada a maquina DEK";
+                    movimiento = "insertado a maquina DEK";
                 else if (bitacora.ElementAt(i).TipoMovimiento == 3)
                     movimiento = "Retorno a refrigerador";
                 else if (bitacora.ElementAt(i).TipoMovimiento == 4)

@@ -17,7 +17,7 @@ namespace MPManagement.Views.Converters
             else if ((int)value == 1)
                 return ("Salida a ambientacion");
             else if ((int)value == 2)
-                return ("insertada a maquina DEK");
+                return ("insertado a maquina DEK");
             else if ((int)value == 3)
                 return ("Retorno a refrigerador");
             else if ((int)value == 4)
